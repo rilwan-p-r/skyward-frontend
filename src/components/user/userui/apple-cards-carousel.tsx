@@ -103,7 +103,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
 
           <div
             className={cn(
-              "flex flex-row justify-start gap-4 pl-4",
+              "flex flex-row justify-start gap-2 pl-2",
               "max-w-7xl mx-auto"
             )}
           >
@@ -163,7 +163,7 @@ export const Card = ({
 }) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { onCardClose, currentIndex } = useContext(CarouselContext);
+  const { onCardClose,  } = useContext(CarouselContext); //currentIndex
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -180,6 +180,7 @@ export const Card = ({
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   useOutsideClick(containerRef, () => handleClose());
@@ -278,7 +279,7 @@ export const BlurImage = ({
   src: string;
   className?: string;
   alt?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }) => {
   const [isLoading, setLoading] = useState(true);
   return (

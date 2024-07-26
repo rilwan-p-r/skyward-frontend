@@ -1,5 +1,5 @@
 
-import HomeScreen from './pages/user/HomeScreen'
+import HomeScreen from "./pages/HomeScreen"
 
 const App = () => {
   return (

@@ -1,7 +1,11 @@
-import Navbar from "../../components/user/user/Navbar";
-import { FlipWordsDemo } from "../../components/user/user/FlipWords";
-import { MovingBorderDemo } from "../../components/user/user/MovingBorderDemo";
-import { AppleCardsCarouselDemo } from "../../components/user/user/AppleCardsCarouselDemo";
+import Navbar from "../components/user/user/Navbar";
+import { FlipWordsDemo } from "../components/user/user/FlipWords";
+import { MovingBorderDemo } from "../components/user/user/MovingBorderDemo";
+import { AppleCardsCarouselDemo } from "../components/user/user/AppleCardsCarouselDemo";
+import { ReviewsList } from "../components/user/user/ReviewsList";
+import { Footer } from "../components/user/user/Footer";
+
+
 const HomeScreen = () => {
   return (
     <>
@@ -32,7 +36,18 @@ const HomeScreen = () => {
       <div className="flex items-center justify-center mt-8">
         <h1 className="font-bold text-2xl">Upcoming events</h1>
       </div>
-      <AppleCardsCarouselDemo/>
+
+      <AppleCardsCarouselDemo />
+
+      <div className="w-full h-full">
+        <h1 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">
+          What's our students says
+        </h1>
+      </div>
+      
+      <ReviewsList/>
+
+      <Footer/>
     </>
   );
 };

@@ -1,5 +1,5 @@
 
-import FlipWords from "../ui/flip-words";
+import FlipWords from "../userui/flip-words";
 
 
 export function FlipWordsDemo() {
