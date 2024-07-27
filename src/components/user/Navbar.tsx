@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -8,6 +9,7 @@ const Navbar = () => {
   };
 
   return (
+    <>
     <header className="bg-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center space-x-8">
@@ -40,6 +42,8 @@ const Navbar = () => {
         </div>
       )}
     </header>
+    <Outlet></Outlet>
+    </>
   );
 };
 

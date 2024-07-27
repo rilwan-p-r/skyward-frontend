@@ -2,7 +2,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { StarRating } from "../user/StarRating";
+import { StarRating } from "../../user/StarRating";
 
 interface Item {
     studentName: string;

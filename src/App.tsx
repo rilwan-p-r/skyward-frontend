@@ -1,10 +1,12 @@
 
-import HomeScreen from "./pages/HomeScreen"
+import { RouterProvider } from "react-router-dom"
+import { router } from "./routers/MainRouters"
 
 const App = () => {
   return (
     <>
-    <HomeScreen/>
+    <RouterProvider router={router}/>
+
     </>
   )
 }

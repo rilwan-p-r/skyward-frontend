@@ -1,15 +1,16 @@
-import Navbar from "../components/user/user/Navbar";
-import { FlipWordsDemo } from "../components/user/user/FlipWords";
-import { MovingBorderDemo } from "../components/user/user/MovingBorderDemo";
-import { AppleCardsCarouselDemo } from "../components/user/user/AppleCardsCarouselDemo";
-import { ReviewsList } from "../components/user/user/ReviewsList";
-import { Footer } from "../components/user/user/Footer";
+// import Navbar from "../components/user/Navbar";
+import { FlipWordsDemo } from "../components/user/FlipWords";
+import { MovingBorderDemo } from "../components/user/MovingBorderDemo";
+import { AppleCardsCarouselDemo } from "../components/user/AppleCardsCarouselDemo";
+import { ReviewsList } from "../components/user/ReviewsList";
+import { Footer } from "../components/user/Footer";
+
 
 
 const HomeScreen = () => {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
 
       <div className="flex flex-col md:flex-row items-center p-4">
         <div className="flex-1 text-center md:text-left md:mr-6 lg:mr-10">

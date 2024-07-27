@@ -1,5 +1,5 @@
 
-import { Carousel,Card } from "../userui/apple-cards-carousel";
+import { Carousel,Card } from "../ui/userui/apple-cards-carousel";
 
 export function AppleCardsCarouselDemo() {
   const cards = data.map((card, index) => (

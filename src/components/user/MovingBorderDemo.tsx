@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button } from "../userui/moving-border";
+import { Button } from "../ui/userui/moving-border";
 
 export function MovingBorderDemo() {
   return (

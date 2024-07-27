@@ -1,5 +1,5 @@
 // src/components/CardHoverEffectDemo.tsx
-import { HoverEffect } from '../userui/card-hover-effect';
+import { HoverEffect } from '../ui/userui/card-hover-effect';
 
 interface ReviewItem {
   studentName: string;
