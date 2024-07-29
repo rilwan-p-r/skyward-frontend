@@ -4,13 +4,14 @@ import { MovingBorderDemo } from "../components/user/MovingBorderDemo";
 import { AppleCardsCarouselDemo } from "../components/user/AppleCardsCarouselDemo";
 import { ReviewsList } from "../components/user/ReviewsList";
 import { Footer } from "../components/user/Footer";
+import Navbar from "../components/user/Navbar";
 
 
 
 const HomeScreen = () => {
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
 
       <div className="flex flex-col md:flex-row items-center p-4">
         <div className="flex-1 text-center md:text-left md:mr-6 lg:mr-10">

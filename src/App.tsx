@@ -1,12 +1,15 @@
-
-import { RouterProvider } from "react-router-dom"
-import { router } from "./routers/MainRouters"
+import { BrowserRouter } from "react-router-dom"
+import AppRoutes from "./routers/AppRoutes"
+import { ToastContainer } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
     <>
-    <RouterProvider router={router}/>
-
+      <ToastContainer />
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
     </>
   )
 }
