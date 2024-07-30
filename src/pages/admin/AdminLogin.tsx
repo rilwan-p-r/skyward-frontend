@@ -1,12 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { adminLogin } from '../../api/admin';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setAdminInfo } from '../../redux/slices/adminSlices/adminSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store/store';
+
+
+
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const adminInfo = useSelector((state: RootState) => state.adminInfo.adminInfo);
+  console.log('sss',adminInfo);
+  useEffect(() => {
+    if (adminInfo) {
+      navigate('/admin/adminhome');
+    }
+  }, [adminInfo, navigate]);
+  
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
@@ -16,6 +32,7 @@ const AdminLogin = () => {
 
       if (response?.status == 201) {  
         toast.success('login success');
+        dispatch(setAdminInfo(response.data))
         navigate('/admin/adminhome');
       }else{
         toast.error('invalid credintial')

@@ -9,7 +9,7 @@ export const adminLogin = async (body: { email: string, password: string }): Pro
     try {
         const response = await Api.post(adminRoutes.login, body, {
             withCredentials: true,
-        });        
+        });
         return response;
     } catch (error) {
         if (axios.isAxiosError(error)) {
