@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit"
 
 const storedAdminInfo = localStorage.getItem('adminInfo')
 
@@ -7,15 +7,19 @@ const initialState = {
 };
 
 const adminSlice = createSlice({
-    name:'auth',
+    name: 'auth',
     initialState,
     reducers: {
         setAdminInfo: (state, action) => {
             state.adminInfo = action.payload;
             localStorage.setItem('adminInfo', JSON.stringify(action.payload));
         },
+        logout: (state) => {
+            state.adminInfo = null;
+            localStorage.removeItem('adminInfo')
+        }
     }
 })
 
-export const {setAdminInfo}=adminSlice.actions;
+export const { setAdminInfo, logout } = adminSlice.actions;
 export default adminSlice.reducer

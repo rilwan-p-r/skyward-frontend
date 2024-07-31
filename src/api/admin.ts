@@ -7,9 +7,7 @@ export const adminLogin = async (body: { email: string, password: string }): Pro
     console.log('email',body.email);
     
     try {
-        const response = await Api.post(adminRoutes.login, body, {
-            withCredentials: true,
-        });
+        const response = await Api.post(adminRoutes.login, body);
         return response;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -19,4 +17,17 @@ export const adminLogin = async (body: { email: string, password: string }): Pro
             throw error;
         }
     }
+}
+    export const adminLogout = async (): Promise<AxiosResponse<unknown> | undefined> => {
+        try {
+          const response = await Api.post(adminRoutes.logout);
+          return response;
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            return error.response;
+          } else {
+            console.error('Unexpected error:', error);
+            throw error;
+          }
+        }
 }   
