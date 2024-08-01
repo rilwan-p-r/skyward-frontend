@@ -6,7 +6,7 @@ const AdminHome = () => {
     <div className="flex">
       <AdminSidebar />
       <main className="flex-1 p-8 bg-gray-100">
-        <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold mb-8 mt-10">Admin Dashboard</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <DashboardBox title="Students" count={250} />
           <DashboardBox title="Teachers" count={30} />

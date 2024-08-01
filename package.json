@@ -12,13 +12,15 @@
   "dependencies": {
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
-    "@mui/material": "^5.16.5",
+    "@mui/icons-material": "^5.16.6",
+    "@mui/material": "^5.16.6",
     "@reduxjs/toolkit": "^2.2.7",
     "@tabler/icons-react": "^3.11.0",
     "@types/react-redux": "^7.1.33",
     "axios": "^1.7.2",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
+    "formik": "^2.4.6",
     "framer-motion": "^11.3.17",
     "lucide-react": "^0.416.0",
     "react": "^18.3.1",
@@ -28,8 +30,9 @@
     "react-router-dom": "^6.25.1",
     "react-toastify": "^10.0.5",
     "redux": "^5.0.1",
-    "sweetalert2": "^11.12.3",
-    "tailwind-merge": "^2.4.0"
+    "sweetalert2": "^11.6.13",
+    "tailwind-merge": "^2.4.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

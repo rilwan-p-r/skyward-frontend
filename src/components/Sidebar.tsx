@@ -138,4 +138,4 @@ export function SidebarItem({ icon, text, active = false, alert = false, to }: S
       )}
     </li>
   );
-}
+} 
