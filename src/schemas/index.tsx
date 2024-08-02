@@ -17,7 +17,6 @@ export const addTeacherSchema = yup.object().shape({
   image: yup
     .mixed<File>()
     .required('Required')
-    .test('fileSize', 'File is too large', value => value ? value.size <= FILE_SIZE : true)
-    .test('fileType', 'Unsupported File Format', value => value ? SUPPORTED_FORMATS.includes(value.type) : true),
-  about: yup.string().required('Required').max(500, 'Maximum 500 characters'),
+    .test('fileSize', 'File is too large', value => value && value.size <= FILE_SIZE)
+    .test('fileType', 'Unsupported File Format', value => value && SUPPORTED_FORMATS.includes(value.type)),
 });

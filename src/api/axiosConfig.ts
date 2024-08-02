@@ -6,5 +6,6 @@ const Api = axios.create({
     baseURL:BASE_URL,
     withCredentials:true,
 })
+Api.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 
 export default Api; 

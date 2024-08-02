@@ -1,7 +1,9 @@
-import React from 'react';
-import AdminSidebar from '../../components/admin/AdminSidebarItems';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { addTeacherSchema } from '../../schemas';
+import AdminSidebar from '../../components/admin/AdminSidebarItems';
+import { addTeacher } from '../../api/admin';
+import { toast } from 'react-toastify';
 
 interface TeacherFormValues {
   name: string;
@@ -10,7 +12,6 @@ interface TeacherFormValues {
   subject: string;
   yearsOfExperience: string;
   image: File | null;
-  about: string;
 }
 
 const textInputFields: { name: keyof Omit<TeacherFormValues, 'image'>; label: string; type: string }[] = [
@@ -25,6 +26,9 @@ const FileInput = ({
   field,
   handleFileChange,
   fileType,
+  previewUrl,
+  touched,
+  error,
 }: {
   field: keyof Pick<TeacherFormValues, 'image'>;
   handleFileChange: (
@@ -32,6 +36,9 @@ const FileInput = ({
     fieldName: keyof TeacherFormValues
   ) => void;
   fileType: string;
+  previewUrl: string | null;
+  touched: boolean;
+  error?: string;
 }) => (
   <div key={field} className="relative">
     <label
@@ -42,20 +49,30 @@ const FileInput = ({
     </label>
     <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
       <div className="space-y-1 text-center">
-        <svg
-          className="mx-auto h-12 w-12 text-gray-400"
-          stroke="currentColor"
-          fill="none"
-          viewBox="0 0 48 48"
-          aria-hidden="true"
-        >
-          <path
-            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        {previewUrl ? (
+          <div className="mb-4">
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="mx-auto h-48 w-48 object-cover rounded-md shadow-md border-4 border-gray-200"
+            />
+          </div>
+        ) : (
+          <svg
+            className="mx-auto h-12 w-12 text-gray-400"
+            stroke="currentColor"
+            fill="none"
+            viewBox="0 0 48 48"
+            aria-hidden="true"
+          >
+            <path
+              d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
         <div className="flex text-sm text-gray-600">
           <label
             htmlFor={field}
@@ -74,13 +91,43 @@ const FileInput = ({
           <p className="pl-1">or drag and drop</p>
         </div>
         <p className="text-xs text-gray-500">PNG, JPG up to 1MB</p>
+        {touched && error && (
+          <p className="mt-2 text-sm text-red-600">{error}</p>
+        )}
       </div>
     </div>
   </div>
 );
 
 const AddTeacher = () => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
+  const handleSubmit = async (values: TeacherFormValues) => {
+    const formData = new FormData();
+    formData.append('name', values.name);
+    formData.append('address', values.address);
+    formData.append('email', values.email);
+    formData.append('subject', values.subject);
+    formData.append('yearsOfExperience', values.yearsOfExperience);
+    if (values.image) {
+      formData.append('image', values.image);
+    } else {
+      toast.warning('Please upload an image');
+      return;
+    }
+
+    try { 
+      const response = await addTeacher(formData);
+      console.log('Success:', response);
+      toast.success('Teacher added successfully');
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      formik.resetForm();
+      setPreviewUrl(null); // Reset the preview URL
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Failed to add teacher');
+    }
+  };
 
   const formik = useFormik<TeacherFormValues>({
     initialValues: {
@@ -90,13 +137,13 @@ const AddTeacher = () => {
       subject: '',
       yearsOfExperience: '',
       image: null,
-      about: '',
     },
     validationSchema: addTeacherSchema,
     onSubmit: (values) => {
-      console.log('Submitted.', values);
+      handleSubmit(values);
     },
   });
+console.log('dataaa',formik.values);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -104,89 +151,85 @@ const AddTeacher = () => {
   ) => {
     const file = e.currentTarget.files ? e.currentTarget.files[0] : null;
     formik.setFieldValue(fieldName, file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewUrl(null);
+    }
   };
 
   return (
-    <div className="fixed flex bg-gray-100 w-full">
-    <AdminSidebar />
-  
-    <div className="flex-1 ml-0 md:ml-64 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-xl shadow-md">
-        <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-6">
-          Add New Teacher
-        </h1>
-        <form onSubmit={formik.handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {textInputFields.map((field) => (
-              <div key={field.name} className="relative">
-                <input
-                  id={field.name}
-                  name={field.name}
-                  type={field.type}
-                  className="peer h-14 w-full border-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:ring-0 rounded-md px-3 pt-3 pb-2"
-                  placeholder={field.label}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values[field.name as keyof Omit<TeacherFormValues, 'image'>] || ''}
-                />
-                <label
-                  htmlFor={field.name}
-                  className="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-black"
-                >
-                  {field.label}
-                </label>
-                {formik.touched[field.name as keyof Omit<TeacherFormValues, 'image'>] && formik.errors[field.name as keyof Omit<TeacherFormValues, 'image'>] && (
-                  <p className="mt-2 text-sm text-red-600">
-                    {formik.errors[field.name as keyof Omit<TeacherFormValues, 'image'>] as string}
-                  </p>
-                )}
+    <div className="flex h-screen bg-gray-100">
+      <AdminSidebar />
+      <div className="flex-1 overflow-auto">
+        <div className="max-w-4xl mx-auto my-8 px-4 sm:px-6 lg:px-8">
+          <div className="bg-white p-6 sm:p-8 rounded-xl shadow-md">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-900">
+              Add New Teacher
+            </h1>
+            <form onSubmit={formik.handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {textInputFields.map((field) => (
+                  <div key={field.name} className="relative">
+                    <input
+                      id={field.name}
+                      name={field.name}
+                      type={field.type}
+                      className="peer w-full h-12 border border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-md px-3 pt-5 pb-2"
+                      placeholder={field.label}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={
+                        formik.values[field.name as keyof Omit<TeacherFormValues, 'image'>] || ''
+                      }
+                    />
+                    <label
+                      htmlFor={field.name}
+                      className="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500"
+                    >
+                      {field.label}
+                    </label>
+                    {formik.touched[field.name as keyof Omit<TeacherFormValues, 'image'>] &&
+                      formik.errors[field.name as keyof Omit<TeacherFormValues, 'image'>] && (
+                        <p className="mt-2 text-sm text-red-600">
+                          {
+                            formik.errors[
+                              field.name as keyof Omit<TeacherFormValues, 'image'>
+                            ] as string
+                          }
+                        </p>
+                      )}
+                  </div>
+                ))}
               </div>
-            ))}
-  
-            <FileInput
-              field="image"
-              handleFileChange={handleFileChange}
-              fileType="image/jpeg, image/png"
-            />
-  
-            <div className="relative">
-              <textarea
-                id="about"
-                name="about"
-                rows={4}
-                className="peer h-32 w-full border-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-black focus:ring-0 rounded-md px-3 pt-6 pb-2"
-                placeholder="About"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.about || ''}
-              ></textarea>
-              <label
-                htmlFor="about"
-                className="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-black"
-              >
-                About
-              </label>
-              {formik.touched.about && formik.errors.about && (
-                <p className="mt-2 text-sm text-red-600">
-                  {formik.errors.about as string}
-                </p>
-              )}
-            </div>
+              <div className="col-span-full">
+                <FileInput
+                  field="image"
+                  handleFileChange={handleFileChange}
+                  fileType="image/jpeg, image/png"
+                  previewUrl={previewUrl}
+                  touched={formik.touched.image || false}
+                  error={formik.errors.image as string}
+                />
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  className="w-full h-12 items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
+                >
+                  Create a teacher
+                </button>
+              </div>
+            </form>
           </div>
-  
-          <div>
-            <button
-              type="submit"
-              className="w-full bg-black text-white rounded-md py-3 px-4 text-lg font-semibold hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition duration-150 ease-in-out"
-            >
-              Create a teacher
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
-  
   );
 };
 
