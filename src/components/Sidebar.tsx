@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch} from "react-redux";
 import { logout } from "../redux/slices/adminSlices/adminSlice";
-import { adminLogout } from "../api/admin";
+import { adminLogout } from "../api/admin/adminAuth";
 
 interface SidebarContextType {
   expanded: boolean;

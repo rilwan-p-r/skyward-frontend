@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import AdminHome from '../pages/admin/AdHome'
 import TeachersList from '../pages/admin/TeachersList'
 import AdminProtectedRoute from './ProtectedRoutes/AdminProtectedRoute'
+import AddStudent from '../pages/admin/AddStudent'
 
 
 
@@ -15,6 +16,7 @@ const AdminRoutes = () => {
         <Route element={<AdminProtectedRoute />}>
           <Route path="adminhome" element={<AdminHome />} />
           <Route path="addteacher" element={<AddTeacher />} />
+          <Route path="addstudent" element={<AddStudent />} />
           <Route path="teacherslist" element={<TeachersList />} />
         </Route>
 

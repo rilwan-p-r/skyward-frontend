@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { adminLogin } from '../../api/admin';
+import { adminLogin } from '../../api/admin/adminAuth';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';

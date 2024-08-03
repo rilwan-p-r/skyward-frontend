@@ -1,6 +1,7 @@
 import { Home } from "lucide-react";
 import { GiTeacher } from "react-icons/gi";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
+import { FaUserGraduate } from "react-icons/fa"; // Import a student icon
 
 import Sidebar, { SidebarItem } from "../Sidebar";
 
@@ -8,8 +9,13 @@ const AdminSidebar = () => {
   return (
     <>
       <Sidebar>
-        <SidebarItem icon={<Home size={20} />} text="Home" active
-          to="/admin/adminhome" alert />
+        <SidebarItem 
+          icon={<Home size={20} />} 
+          text="Home" 
+          active
+          to="/admin/adminhome" 
+          alert 
+        />
         <SidebarItem
           icon={<GiTeacher size={20} />}
           text="Add Teacher"
@@ -22,6 +28,12 @@ const AdminSidebar = () => {
           active
           to="/admin/teacherslist"
           alert
+        />
+        <SidebarItem
+          icon={<FaUserGraduate size={20} />}
+          text="Add Student"
+          active
+          to="/admin/addstudent"
         />
       </Sidebar>
     </>

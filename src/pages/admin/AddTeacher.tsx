@@ -2,20 +2,28 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { addTeacherSchema } from '../../schemas';
 import AdminSidebar from '../../components/admin/AdminSidebarItems';
-import { addTeacher } from '../../api/admin';
+import { addTeacher } from '../../api/admin/addTeacher';
 import { toast } from 'react-toastify';
 
 interface TeacherFormValues {
-  name: string;
+  firstName: string;
+  lastName:string
   address: string;
   email: string;
   subject: string;
   yearsOfExperience: string;
   image: File | null;
 }
+interface SuccessMessage {
+  message: string;
+}
+interface ResponseData {
+  data: SuccessMessage;
+}
 
 const textInputFields: { name: keyof Omit<TeacherFormValues, 'image'>; label: string; type: string }[] = [
-  { name: 'name', label: 'Name', type: 'text' },
+  { name: 'firstName', label: 'First Name', type: 'text' },
+  { name: 'lastName', label: 'Last Name', type: 'text' },
   { name: 'address', label: 'Address', type: 'text' },
   { name: 'email', label: 'Email', type: 'email' },
   { name: 'subject', label: 'Subject', type: 'text' },
@@ -104,7 +112,8 @@ const AddTeacher = () => {
 
   const handleSubmit = async (values: TeacherFormValues) => {
     const formData = new FormData();
-    formData.append('name', values.name);
+    formData.append('firstName', values.firstName);
+    formData.append('lastName', values.lastName);
     formData.append('address', values.address);
     formData.append('email', values.email);
     formData.append('subject', values.subject);
@@ -116,22 +125,25 @@ const AddTeacher = () => {
       return;
     }
 
-    try { 
-      const response = await addTeacher(formData);
+    try {
+      const response = await addTeacher(formData) as ResponseData;
       console.log('Success:', response);
-      toast.success('Teacher added successfully');
+      const message = response.data.message || 'Teacher added';
+      toast.success(message);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       formik.resetForm();
-      setPreviewUrl(null); // Reset the preview URL
+      setPreviewUrl(null);
     } catch (error) {
       console.error('Error:', error);
       toast.error('Failed to add teacher');
     }
+    
   };
 
   const formik = useFormik<TeacherFormValues>({
     initialValues: {
-      name: '',
+      firstName: '',
+      lastName:'',
       address: '',
       email: '',
       subject: '',
@@ -143,7 +155,7 @@ const AddTeacher = () => {
       handleSubmit(values);
     },
   });
-console.log('dataaa',formik.values);
+  console.log('dataaa', formik.values);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -199,7 +211,7 @@ console.log('dataaa',formik.values);
                         <p className="mt-2 text-sm text-red-600">
                           {
                             formik.errors[
-                              field.name as keyof Omit<TeacherFormValues, 'image'>
+                            field.name as keyof Omit<TeacherFormValues, 'image'>
                             ] as string
                           }
                         </p>

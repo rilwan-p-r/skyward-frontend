@@ -12,6 +12,7 @@ const AdminHome = () => {
           <DashboardBox title="Teachers" count={30} />
           <DashboardBox title="Classes" count={15} />
         </div>
+      
       </main>
     </div>
   )
