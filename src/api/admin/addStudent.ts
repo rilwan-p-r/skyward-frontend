@@ -10,7 +10,7 @@ export  const addStudent =  async(formData:FormData): Promise<AxiosResponse<unkn
          'Content-Type': 'multipart/form-data'
        }
      });
-      return response;
+      return response
     }catch(error){
      if(axios.isAxiosError(error)){
        return error.response;
