@@ -1,5 +1,5 @@
 import { BrowserRouter } from "react-router-dom"
-import AppRoutes from "./routers/AppRoutes"
+import AppRoutes from "./routers/AppRoutes/AppRoutes"
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 

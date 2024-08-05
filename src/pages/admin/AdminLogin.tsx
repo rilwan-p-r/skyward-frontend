@@ -32,7 +32,7 @@ const AdminLogin = () => {
 
       if (response?.status == 201) {  
         toast.success('login success');
-        dispatch(setAdminInfo(response.data))
+        dispatch(setAdminInfo(response.data.email))
         navigate('/admin/adminhome');
       }else{
         toast.error('invalid credintial')

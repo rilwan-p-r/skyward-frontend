@@ -1,18 +1,15 @@
 // import Navbar from "../components/user/Navbar";
-import { FlipWordsDemo } from "../components/user/FlipWords";
-import { MovingBorderDemo } from "../components/user/MovingBorderDemo";
-import { AppleCardsCarouselDemo } from "../components/user/AppleCardsCarouselDemo";
-import { ReviewsList } from "../components/user/ReviewsList";
-import { Footer } from "../components/user/Footer";
-import Navbar from "../components/user/Navbar";
-
-
+import { FlipWordsDemo } from "../components/main/FlipWords";
+import { MovingBorderDemo } from "../components/main/MovingBorderDemo";
+import { EventsCard } from "../components/main/event/eventsCard";
+import { ReviewsList } from "../components/main/review/ReviewsList";
+import { Footer } from "../components/main/Footer";
+import Navbar from "../components/main/navbar/Navbar";
 
 const HomeScreen = () => {
   return (
     <>
-      <Navbar />
-
+    <Navbar/>
       <div className="flex flex-col md:flex-row items-center p-4">
         <div className="flex-1 text-center md:text-left md:mr-6 lg:mr-10">
           <FlipWordsDemo />
@@ -39,7 +36,7 @@ const HomeScreen = () => {
         <h1 className="font-bold text-2xl">Upcoming events</h1>
       </div>
 
-      <AppleCardsCarouselDemo />
+      <EventsCard />
 
       <div className="w-full h-full">
         <h1 className="max-w-7xl pl-4 mx-auto text-xl md:text-5xl font-bold text-neutral-800 dark:text-neutral-200 font-sans">

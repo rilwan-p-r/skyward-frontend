@@ -1,13 +1,17 @@
 import Api from '../axiosConfig';
-import adminRoutes from '../../endpoints/adminRoutes';
+import adminEndpoint from '../../endpoints/adminEndpoints/AdminEndpoint';
 import { AxiosResponse } from 'axios';
 import * as axios from 'axios';
+interface AdminLoginResponse {
+  email: string;
+  token: string;
+}
 
-export const adminLogin = async (body: { email: string, password: string }): Promise<AxiosResponse<unknown> | undefined> => {
+export const adminLogin = async (body: { email: string, password: string }): Promise<AxiosResponse<AdminLoginResponse> | undefined> => {
     console.log('email',body.email);
     
     try {
-        const response = await Api.post(adminRoutes.login, body);
+        const response = await Api.post(adminEndpoint.login, body);
         return response;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -20,7 +24,7 @@ export const adminLogin = async (body: { email: string, password: string }): Pro
 }
     export const adminLogout = async (): Promise<AxiosResponse<unknown> | undefined> => {
         try {
-          const response = await Api.post(adminRoutes.logout);
+          const response = await Api.post(adminEndpoint.logout);
           return response;
         } catch (error) {
           if (axios.isAxiosError(error)) {

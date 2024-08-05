@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import AdminSidebar from '../../components/admin/AdminSidebarItems';
+import AdminSidebar from '../../components/admin/sidebar/AdminSidebarItems';
 import { getTeachers } from '../../api/admin/getTeachers';
 import { toast } from 'react-toastify';
 
@@ -48,7 +48,7 @@ const TeachersList = () => {
                   <p className="text-sm text-gray-600"><span className="font-medium">Email:</span> {teacher.email}</p>
                   <p className="text-sm text-gray-600"><span className="font-medium">Experience:</span> {teacher.yearsOfExperience} years</p>
                   <p className="text-sm text-gray-600"><span className="font-medium">Address:</span> {teacher.address}</p>
-                  <p className="text-sm text-gray-600"><span className="font-medium">Verified:</span> {teacher.verified ? 'Yes' : 'No'}</p>
+                  {/* <p className="text-sm text-gray-600"><span className="font-medium">Verified:</span> {teacher.verified ? 'Yes' : 'No'}</p> */}
                 </div>
               </div>
               <div className="bg-gray-50 px-4 py-3 flex justify-end space-x-2">

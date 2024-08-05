@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { addStudentSchema } from '../../schemas';
-import AdminSidebar from '../../components/admin/AdminSidebarItems';
+import AdminSidebar from '../../components/admin/sidebar/AdminSidebarItems';
 import { addStudent } from '../../api/admin/addStudent';
 import { toast } from 'react-toastify';
 

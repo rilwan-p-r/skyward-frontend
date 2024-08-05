@@ -4,17 +4,18 @@ const FILE_SIZE = 1024 * 1024; // 1MB
 const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
 
 export const addTeacherSchema = yup.object().shape({
-  firstName: yup.string().required('Required'),
-  lastName: yup.string().required('Required'),
-  address: yup.string().required('Required'),
+  firstName: yup.string().required('Required').matches(/^[A-Za-z]+$/, 'Must contain only letters'),
+  lastName: yup.string().required('Required').matches(/^[A-Za-z]+$/, 'Must contain only letters'),
+  address: yup.string().required('Required').matches(/^(?=(?:.*[A-Za-z]){5})[A-Za-z0-9\s]*$/, 'Must contain at least 5 letters and can include numbers and spaces'),
   email: yup.string().email('Please enter a valid email').required('Required'),
-  subject: yup.string().required('Required'),
+  subject: yup.string().required('Required').matches(/^[A-Za-z]+$/, 'Must contain only letters'),
   yearsOfExperience: yup
     .string()
     .required('Required')
     .matches(/^\d+$/, 'Must be a valid number')  // ensures it’s a numeric string
     .test('positive', 'Must be a positive number', value => Number(value) > 0)
-    .test('integer', 'Must be an integer', value => Number.isInteger(Number(value))),
+    .test('integer', 'Must be an integer', value => Number.isInteger(Number(value)))
+    .test('maxValue', 'Must not exceed 35 years', value => Number(value) <= 35),
   image: yup
     .mixed<File>()
     .required('Required')
@@ -24,16 +25,33 @@ export const addTeacherSchema = yup.object().shape({
 
 
 export const addStudentSchema = yup.object().shape({
-  firstName: yup.string().required('First name is required'),
-  lastName: yup.string().required('Last name is required'),
-  dateOfBirth: yup.date()
-    .required('Date of birth is required')
-    .max(new Date(), 'Date of birth cannot be in the future'),
+  firstName: yup.string().required('First name is required').matches(/^[A-Za-z]+$/, 'Must contain only letters'),
+  lastName: yup.string().required('Last name is required').matches(/^[A-Za-z]+$/, 'Must contain only letters'),
+  dateOfBirth: yup
+  .date()
+  .required('Date of birth is required')
+  .max(new Date(), 'Date of birth cannot be in the future')
+  .min(new Date('1980-01-01'), 'Date of birth cannot be before January 1, 1980')
+  .test('age', 'Must be at least 5 years old', value => {
+    if (!value) return false;
+    const today = new Date();
+    const birthDate = new Date(value);
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      return age - 1 >= 5;
+    }
+    return age >= 5;
+  }),
   gender: yup.string()
     .oneOf(['male', 'female', 'other'], 'Please select a valid gender')
     .required('Gender is required'),
-  address: yup.string().required('Address is required'),
-  email: yup.string().email('Please enter a valid email').required('Email is required'),
+  address: yup.string().required('Address is required').matches(/^(?=(?:.*[A-Za-z]){5})[A-Za-z0-9\s]*$/, 'Must contain at least 5 letters and can include numbers and spaces'),
+  email: yup
+  .string()
+  .email('Please enter a valid email')
+  .required('Email is required')
+  .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Email must be a valid Gmail address'),
   phoneNumber: yup.string()
     .matches(/^[0-9]+$/, 'Phone number must only contain digits')
     .min(10, 'Phone number must be at least 10 digits')

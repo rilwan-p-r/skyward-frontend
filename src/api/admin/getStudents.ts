@@ -2,9 +2,9 @@ import Api from '../axiosConfig';
 import adminEndpoint from '../../endpoints/adminEndpoints/AdminEndpoint';
 import * as axios from 'axios';
 
-export const getTeachers = async () => {
+export const getStudents = async () => {
   try {
-    const response = await Api.get(adminEndpoint.getTeachers);
+    const response = await Api.get(adminEndpoint.getStudents);
     console.log('teacherrr',response);
     
     return response.data
