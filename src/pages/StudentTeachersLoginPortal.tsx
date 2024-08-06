@@ -1,27 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUserGraduate, FaChalkboardTeacher } from 'react-icons/fa';
-import Navbar from '../components/main/navbar/Navbar';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store/store';
 
 export const StudentTeachersLoginPortal = () => {
-  const navigate = useNavigate()
-
-  const teacherInfo = useSelector((state: RootState) => state.teacherInfo.teacherInfo);
-  const studentInfo = useSelector((state: RootState) => state.studentInfo.studentInfo);
-
-  useEffect(()=>{
-    if (teacherInfo) {
-      navigate('/teacher/')
-    }else if(studentInfo){
-      navigate('/student/')
-    }
-  },[studentInfo,teacherInfo,navigate])
 
   return (
     <>
-    <Navbar/>
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">Welcome to the Learning Portal</h1>

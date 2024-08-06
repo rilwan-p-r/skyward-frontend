@@ -4,10 +4,21 @@ const FILE_SIZE = 1024 * 1024; // 1MB
 const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
 
 export const addTeacherSchema = yup.object().shape({
-  firstName: yup.string().required('Required').matches(/^[A-Za-z]+$/, 'Must contain only letters'),
-  lastName: yup.string().required('Required').matches(/^[A-Za-z]+$/, 'Must contain only letters'),
-  address: yup.string().required('Required').matches(/^(?=(?:.*[A-Za-z]){5})[A-Za-z0-9\s]*$/, 'Must contain at least 5 letters and can include numbers and spaces'),
-  email: yup.string().email('Please enter a valid email').required('Required'),
+  firstName: yup.string()
+    .required('First name is required')
+    .matches(/^[A-Za-z]+(?:\s[A-Za-z]+)*$/, 'Must contain only letters and spaces')
+    .test('not-only-spaces', 'First name cannot contain only spaces', value => value.trim().length > 0),
+  lastName: yup.string()
+    .required('Last name is required')
+    .matches(/^[A-Za-z]+(?:\s[A-Za-z]+)*$/, 'Must contain only letters and spaces')
+    .test('not-only-spaces', 'Last name cannot contain only spaces', value => value.trim().length > 0),
+    address: yup.string()
+    .required('Address is required')
+    .matches(/^(?=(?:.*[A-Za-z]){5})[A-Za-z0-9\s,]*$/, 'Must contain at least 5 letters and can include numbers, spaces, and commas'),
+    email: yup
+  .string()
+  .email('Please enter a valid email')
+  .required('Email is required'),
   subject: yup.string().required('Required').matches(/^[A-Za-z]+$/, 'Must contain only letters'),
   yearsOfExperience: yup
     .string()
@@ -25,8 +36,14 @@ export const addTeacherSchema = yup.object().shape({
 
 
 export const addStudentSchema = yup.object().shape({
-  firstName: yup.string().required('First name is required').matches(/^[A-Za-z]+$/, 'Must contain only letters'),
-  lastName: yup.string().required('Last name is required').matches(/^[A-Za-z]+$/, 'Must contain only letters'),
+  firstName: yup.string()
+    .required('First name is required')
+    .matches(/^[A-Za-z]+(?:\s[A-Za-z]+)*$/, 'Must contain only letters and spaces')
+    .test('not-only-spaces', 'First name cannot contain only spaces', value => value.trim().length > 0),
+  lastName: yup.string()
+    .required('Last name is required')
+    .matches(/^[A-Za-z]+(?:\s[A-Za-z]+)*$/, 'Must contain only letters and spaces')
+    .test('not-only-spaces', 'Last name cannot contain only spaces', value => value.trim().length > 0),
   dateOfBirth: yup
   .date()
   .required('Date of birth is required')
@@ -46,12 +63,14 @@ export const addStudentSchema = yup.object().shape({
   gender: yup.string()
     .oneOf(['male', 'female', 'other'], 'Please select a valid gender')
     .required('Gender is required'),
-  address: yup.string().required('Address is required').matches(/^(?=(?:.*[A-Za-z]){5})[A-Za-z0-9\s]*$/, 'Must contain at least 5 letters and can include numbers and spaces'),
+    address: yup.string()
+    .required('Address is required')
+    .matches(/^(?=(?:.*[A-Za-z]){5})[A-Za-z0-9\s,]*$/, 'Must contain at least 5 letters and can include numbers, spaces, and commas'),
   email: yup
   .string()
   .email('Please enter a valid email')
-  .required('Email is required')
-  .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Email must be a valid Gmail address'),
+  .required('Email is required'),
+  // .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Email must be a valid Gmail address'),
   phoneNumber: yup.string()
     .matches(/^[0-9]+$/, 'Phone number must only contain digits')
     .min(10, 'Phone number must be at least 10 digits')
@@ -72,3 +91,18 @@ export const addStudentSchema = yup.object().shape({
     .test('fileSize', 'File is too large', value => value && value.size <= FILE_SIZE)
     .test('fileType', 'Unsupported File Format', value => value && SUPPORTED_FORMATS.includes(value.type)),
 });
+
+export const loginSchema=yup.object().shape({
+  email: yup
+  .string()
+  .email('Please enter a valid email')
+  .required('Email is required'),
+  // .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Email must be a valid Gmail address'),
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters long')
+    .matches(/[a-zA-Z]/, 'Password must contain at least one letter')
+})
+
+

@@ -1,11 +1,11 @@
 import React from "react";
-import Navbar from "../main/navbar/Navbar";
+import MainNavbar from "../mainNavbar/MainNavbar";
 import { Outlet } from "react-router-dom";
 
-const NavbarLayout: React.FC = () => {
+const MainLayout: React.FC = () => {
   return (
     <>
-      <Navbar />
+      <MainNavbar />
       <main>
         <Outlet />
       </main>
@@ -13,4 +13,4 @@ const NavbarLayout: React.FC = () => {
   );
 };
 
-export default NavbarLayout;
+export default MainLayout;

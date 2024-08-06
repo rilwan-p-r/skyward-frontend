@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
+const MainNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -66,9 +66,8 @@ const Navbar = () => {
           </div>
         )}
       </header>
-      <Outlet />
     </>
   );
 };
 
-export default Navbar;
+export default MainNavbar;

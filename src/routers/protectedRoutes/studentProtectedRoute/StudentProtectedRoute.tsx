@@ -6,7 +6,7 @@ import { RootState } from '../../../redux/store/store';
 const StudentProtectedRoute: React.FC = () => {
   const studentInfo = useSelector((state: RootState) => state.studentInfo.studentInfo);
 
-  return studentInfo ? <Navigate to="/student" /> : <Outlet />;
+  return studentInfo ? <Outlet /> : <Navigate to="/studentLogin" />;
 };
 
 export default StudentProtectedRoute;

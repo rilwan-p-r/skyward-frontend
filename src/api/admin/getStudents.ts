@@ -5,7 +5,7 @@ import * as axios from 'axios';
 export const getStudents = async () => {
   try {
     const response = await Api.get(adminEndpoint.getStudents);
-    console.log('teacherrr',response);
+    console.log('studentt',response);
     
     return response.data
   } catch (error) {

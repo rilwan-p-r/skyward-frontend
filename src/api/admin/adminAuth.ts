@@ -4,7 +4,6 @@ import { AxiosResponse } from 'axios';
 import * as axios from 'axios';
 interface AdminLoginResponse {
   email: string;
-  token: string;
 }
 
 export const adminLogin = async (body: { email: string, password: string }): Promise<AxiosResponse<AdminLoginResponse> | undefined> => {

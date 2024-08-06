@@ -3,7 +3,6 @@ import { Label } from "../../components/ui/input/label";
 import { Input } from "../../components/ui/input/input";
 import { cn } from "../../lib/utils";
 import Lottie from "lottie-react";
-import Navbar from "../../components/main/navbar/Navbar";
 import teacherLoginAnime from "../../assets/Animations/teacherLoginAnime.json";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
@@ -17,16 +16,13 @@ export function TeacherLogin() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const teacherInfo = useSelector((state: RootState) => state?.teacherInfo?.teacherInfo);
-    const studentInfo = useSelector((state: RootState) => state?.studentInfo?.studentInfo);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     useEffect(() => {
         if (teacherInfo) {
-            navigate('/teacher/')
-        } else if (studentInfo) {
-            navigate('/student/')
-        }
-    }, [studentInfo, teacherInfo, navigate])
+            navigate('/teacher')
+        } 
+    }, [teacherInfo, navigate])
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
@@ -37,7 +33,7 @@ export function TeacherLogin() {
             if (response?.status == 201) {  
                 toast.success('login success');
                 dispatch(setTeacherInfo(response.data))
-                navigate('/student/');
+                navigate('/teacher/');
               }else{
                 toast.error('invalid credintial')
               }
@@ -49,7 +45,6 @@ export function TeacherLogin() {
 
     return (
         <>
-            <Navbar />
             <div className="flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start md:ml-40 mt-10 md:mt-32">
                 <div className="hidden md:block">
                     <Lottie className="w-96 h-80" animationData={teacherLoginAnime} loop={true} />

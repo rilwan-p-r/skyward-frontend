@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Label } from "../../components/ui/input/label";
 import { Input } from "../../components/ui/input/input";
 import { cn } from "../../lib/utils";
 import Lottie from "lottie-react";
-import Navbar from "../../components/main/navbar/Navbar";
 import studentLoginAnime from "../../assets/Animations/studentLoginAnime.json";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store/store";
@@ -12,27 +11,27 @@ import { studentLogin } from "../../api/student/studentAuth";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setStudentInfo } from "../../redux/slices/studentSlices/StudentSlices";
+import { useFormik } from "formik";
+import { loginSchema } from "../../schemas";
 
+interface loginValues{
+    email:string;
+    password:string
+}
 export function StudentLogin() {
     const navigate = useNavigate();
-    const teacherInfo = useSelector((state: RootState) => state.teacherInfo.teacherInfo);
     const studentInfo = useSelector((state: RootState) => state.studentInfo.studentInfo);
     const dispatch = useDispatch()
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
     useEffect(() => {
-        if (teacherInfo) {
-            navigate('/teacher/');
-        } else if (studentInfo) {
-            navigate('/student/');
+        if (studentInfo) {
+            navigate('/student');
         }
-    }, [studentInfo, teacherInfo, navigate]);
+    }, [studentInfo, navigate]);
 
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
-        e.preventDefault();
+    const handleSubmit = async (values:loginValues) => {
         try {
-            const response = await studentLogin({ email, password });
+            const response = await studentLogin(values);
             console.log(response);
 
             if (response?.status == 201) {
@@ -47,10 +46,20 @@ export function StudentLogin() {
         }
     };
 
+    const formik = useFormik<loginValues>({
+        initialValues: {
+          email: '',
+          password: ''
+        },
+        validationSchema: loginSchema,
+        onSubmit: (values) => {
+          handleSubmit(values);
+        },
+      });
+
     return (
         <>
-            <Navbar />
-            <div className="flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start md:ml-40 mt-10 md:mt-32">
+           <div className="flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start md:ml-40 mt-10 md:mt-32">
                 <div className="hidden md:block">
                     <Lottie className="w-96 h-80" animationData={studentLoginAnime} loop={true} />
                 </div>
@@ -62,28 +71,36 @@ export function StudentLogin() {
                         Please login with your credentials to continue. We're excited to have you back!
                     </p>
 
-                    <form className="my-8" onSubmit={handleSubmit}>
+                    <form className="my-8" onSubmit={formik.handleSubmit}>
                         <LabelInputContainer className="mb-4">
                             <Label htmlFor="email">Email Address</Label>
                             <Input
                                 id="email"
+                                name="email"
                                 placeholder="Enter your email Id here"
                                 type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.email}
                             />
+                            {formik.touched.email && formik.errors.email && (
+                                <div className="text-red-500">{formik.errors.email}</div>
+                            )}
                         </LabelInputContainer>
                         <LabelInputContainer className="mb-4">
                             <Label htmlFor="password">Password</Label>
                             <Input
                                 id="password"
+                                name="password"
                                 placeholder="Enter your password here"
                                 type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.password}
                             />
+                            {formik.touched.password && formik.errors.password && (
+                                <div className="text-red-500">{formik.errors.password}</div>
+                            )}
                         </LabelInputContainer>
 
                         <button

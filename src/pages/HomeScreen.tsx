@@ -4,12 +4,10 @@ import { MovingBorderDemo } from "../components/main/MovingBorderDemo";
 import { EventsCard } from "../components/main/event/eventsCard";
 import { ReviewsList } from "../components/main/review/ReviewsList";
 import { Footer } from "../components/main/Footer";
-import Navbar from "../components/main/navbar/Navbar";
 
 const HomeScreen = () => {
   return (
     <>
-    <Navbar/>
       <div className="flex flex-col md:flex-row items-center p-4">
         <div className="flex-1 text-center md:text-left md:mr-6 lg:mr-10">
           <FlipWordsDemo />

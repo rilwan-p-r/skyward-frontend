@@ -18,3 +18,17 @@ export const studentLogin = async (body: { email: string, password: string }): P
         }
     }
 }
+
+export const studentLogout = async (): Promise<AxiosResponse<unknown> | undefined> => {
+    try {
+      const response = await Api.post(studentEndpoint.logout);
+      return response;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return error.response;
+      } else {
+        console.error('Unexpected error:', error);
+        throw error;
+      }
+    }
+  }   
