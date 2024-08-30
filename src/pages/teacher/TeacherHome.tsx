@@ -1,70 +1,75 @@
-import { RootState } from '../../redux/store/store';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { FaBell, FaBars } from 'react-icons/fa';
+import TeacherSidebar from '../../components/teacher/teacherSidebar/TeacherSidebar';
 
-interface Teacher {
-    firstName: string;
-    lastName: string;
-    email: string;
-    imageUrl: string;
+interface Notification {
+    id: number;
+    message: string;
 }
 
-const TeacherHome = () => {
-    const teacher = useSelector((state: RootState) => state.teacherInfo.teacherInfo) as Teacher;
+const TeacherHome: React.FC = () => {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [notifications, ] = useState<Notification[]>([
+        // setNotifications
+        { id: 1, message: "New assignment submitted by John Doe" },
+        { id: 2, message: "Parent-teacher meeting scheduled for tomorrow" },
+        { id: 3, message: "Class 10A attendance is below 80% this week" },
+    ]);
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-1">
-                    <div className="bg-white shadow-lg rounded-lg p-6">
-                        <img src={teacher.imageUrl} alt="Profile" className="w-32 h-32 rounded-full mx-auto mb-4" />
-                        <h2 className="text-2xl font-bold text-center mb-2">{`${teacher.firstName} ${teacher.lastName}`}</h2>
-                        <p className="text-gray-600 text-center mb-4">{teacher.email}</p>
-                        <button className="bg-blue-500 text-white w-full py-2 rounded-md hover:bg-blue-600 transition duration-300">
-                            Edit Profile
-                        </button>
+        <div className="flex h-screen bg-gray-100">
+            <TeacherSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+            <div className="flex-1 flex flex-col overflow-hidden">
+                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
+                    <div className="max-w-7xl mx-auto">
+                        <Header toggleSidebar={toggleSidebar} notificationCount={notifications.length} />
+                        <NotificationList notifications={notifications} />
                     </div>
-                </div>
-                <div className="lg:col-span-2">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition duration-300">
-                            <h3 className="text-xl font-semibold mb-4">Take Attendance</h3>
-                            <button className="bg-green-500 text-white w-full py-2 rounded-md hover:bg-green-600 transition duration-300">
-                                Mark Attendance
-                            </button>
-                        </div>
-                        <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition duration-300">
-                            <h3 className="text-xl font-semibold mb-4">Assign Tasks</h3>
-                            <button className="bg-purple-500 text-white w-full py-2 rounded-md hover:bg-purple-600 transition duration-300">
-                                Create Assignment
-                            </button>
-                        </div>
-                        <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition duration-300">
-                            <h3 className="text-xl font-semibold mb-4">Update Marksheets</h3>
-                            <button className="bg-yellow-500 text-white w-full py-2 rounded-md hover:bg-yellow-600 transition duration-300">
-                                Update Marks
-                            </button>
-                        </div>
-                        <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition duration-300">
-                            <h3 className="text-xl font-semibold mb-4">Apply for Leave</h3>
-                            <button className="bg-red-500 text-white w-full py-2 rounded-md hover:bg-red-600 transition duration-300">
-                                Submit Leave Request
-                            </button>
-                        </div>
-                    </div>
-                    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition duration-300">
-                            <h3 className="text-xl font-semibold mb-4">View Classes</h3>
-                            <p className="text-gray-600">N/A - Classes not implemented yet</p>
-                        </div>
-                        <div className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition duration-300">
-                            <h3 className="text-xl font-semibold mb-4">Class Group Chats</h3>
-                            <p className="text-gray-600">N/A - Class chats not implemented yet</p>
-                        </div>
-                    </div>
-                </div>
+                </main>
             </div>
         </div>
     );
 };
+
+interface HeaderProps {
+    toggleSidebar: () => void;
+    notificationCount: number;
+}
+
+const Header: React.FC<HeaderProps> = ({ toggleSidebar, notificationCount }) => (
+    <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center">
+            <button onClick={toggleSidebar} className="mr-4 md:hidden">
+                <FaBars className="w-6 h-6" />
+            </button>
+            <h2 className="text-2xl font-semibold">Teacher Dashboard</h2>
+        </div>
+        <div className="relative">
+            <FaBell className="w-6 h-6 text-gray-600 cursor-pointer" />
+            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                {notificationCount}
+            </span>
+        </div>
+    </div>
+);
+
+interface NotificationListProps {
+    notifications: Notification[];
+}
+
+const NotificationList: React.FC<NotificationListProps> = ({ notifications }) => (
+    <div className="bg-white shadow rounded-lg divide-y">
+        <h3 className="text-xl font-semibold p-4 border-b">Recent Notifications</h3>
+        {notifications.map((notification) => (
+            <div key={notification.id} className="p-4 hover:bg-gray-50">
+                <p>{notification.message}</p>
+            </div>
+        ))}
+    </div>
+);
 
 export default TeacherHome;

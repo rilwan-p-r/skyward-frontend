@@ -3,7 +3,7 @@ import AdminSidebar from '../../components/admin/sidebar/AdminSidebarItems'
 
 const AdminHome = () => {
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <AdminSidebar />
       <main className="flex-1 p-8 bg-gray-100">
         <h1 className="text-3xl font-bold mb-8 mt-10">Admin Dashboard</h1>

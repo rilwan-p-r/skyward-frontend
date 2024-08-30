@@ -4,16 +4,9 @@ import { addTeacherSchema } from '../../schemas';
 import AdminSidebar from '../../components/admin/sidebar/AdminSidebarItems';
 import { addTeacher } from '../../api/admin/addTeacher';
 import { toast } from 'react-toastify';
+import { TeacherFormValues } from '../../interfaces/teacherFormValue.interfaces';
+import { message } from 'antd';
 
-interface TeacherFormValues {
-  firstName: string;
-  lastName:string
-  address: string;
-  email: string;
-  subject: string;
-  yearsOfExperience: string;
-  image: File | null;
-}
 interface SuccessMessage {
   message: string;
 }
@@ -112,18 +105,24 @@ const AddTeacher = () => {
 
   const handleSubmit = async (values: TeacherFormValues) => {
     const formData = new FormData();
-    formData.append('firstName', values.firstName);
-    formData.append('lastName', values.lastName);
-    formData.append('address', values.address);
-    formData.append('email', values.email);
-    formData.append('subject', values.subject);
-    formData.append('yearsOfExperience', values.yearsOfExperience);
-    if (values.image) {
-      formData.append('image', values.image);
-    } else {
-      toast.warning('Please upload an image');
+
+    const formattedValues = { ...values };
+    if (formattedValues.yearsOfExperience) {
+      formattedValues.yearsOfExperience = Number(formattedValues.yearsOfExperience);
+    }
+    Object.keys(formattedValues).forEach((key) => {
+      if (formattedValues[key as keyof TeacherFormValues] !== null) {
+        formData.append(key, formattedValues[key as keyof TeacherFormValues] as string);
+      }
+    });
+    for (const pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
+    if (!values.image) {
+      message.warning('Please upload an image');
       return;
     }
+
 
     try {
       const response = await addTeacher(formData) as ResponseData;
@@ -137,13 +136,13 @@ const AddTeacher = () => {
       console.error('Error:', error);
       toast.error('Failed to add teacher');
     }
-    
+
   };
 
   const formik = useFormik<TeacherFormValues>({
     initialValues: {
       firstName: '',
-      lastName:'',
+      lastName: '',
       address: '',
       email: '',
       subject: '',
@@ -223,7 +222,7 @@ const AddTeacher = () => {
                 <FileInput
                   field="image"
                   handleFileChange={handleFileChange}
-                  fileType="image/jpeg, image/png"
+                  fileType="image/jpeg, image/png, image/avif"
                   previewUrl={previewUrl}
                   touched={formik.touched.image || false}
                   error={formik.errors.image as string}

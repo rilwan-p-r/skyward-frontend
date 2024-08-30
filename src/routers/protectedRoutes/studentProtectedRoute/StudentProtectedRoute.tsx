@@ -11,3 +11,4 @@ const StudentProtectedRoute: React.FC = () => {
 
 export default StudentProtectedRoute;
 
+  

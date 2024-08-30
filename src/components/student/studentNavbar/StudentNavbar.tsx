@@ -1,19 +1,37 @@
-import React, { useState, } from 'react';
+import React, { useEffect, useState, } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../../redux/store/store';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
-import { logout } from '../../../redux/slices/studentSlices/StudentSlices';
+import { logout, setStudentInfo } from '../../../redux/slices/studentSlices/StudentSlices';
 import { toast } from 'react-toastify';
 import { studentLogout } from '../../../api/student/studentAuth';
+import { getStudentById } from '../../../api/student/getStudentById';
 
 const StudentNavbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch()
   const student = useSelector((state: RootState) => state.studentInfo.studentInfo);
+  const studentId = student?._id;
+  console.log(studentId);
+  
+  useEffect(() => {
+    if (studentId) {
+        const fetchUpdatedStudentInfo = async () => {
+            try {
+                const updatedStudent = await getStudentById(studentId); 
+                console.log('updatedStudent',updatedStudent);
+                dispatch(setStudentInfo(updatedStudent)); 
+            } catch (error) {
+                console.error('Error fetching updated teacher info:', error);
+            }
+        };
 
+        fetchUpdatedStudentInfo();
+    }
+}, [studentId, dispatch]);
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };

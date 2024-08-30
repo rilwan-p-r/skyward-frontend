@@ -6,6 +6,8 @@ import TeachersList from '../../pages/admin/TeachersList'
 import AdminProtectedRoute from '../protectedRoutes/AdminProtectedRoutes/AdminProtectedRoute'
 import AddStudent from '../../pages/admin/AddStudent'
 import StudentsList from '../../pages/admin/StudentList '
+import BatchList from '../../pages/admin/batchList'
+import CourseList from '../../pages/admin/courseList'
 
 
 
@@ -20,14 +22,14 @@ const AdminRoutes = () => {
           <Route path="addstudent" element={<AddStudent />} />
           <Route path="teacherslist" element={<TeachersList />} />
           <Route path="studentslist" element={<StudentsList />} />
+          <Route path="batches" element={<BatchList />} />
         </Route>
+          <Route path="Courses" element={<CourseList />} />
+
 
         {/* Admin login route does not need protection */}
           <Route path='/' element={<AdminLogin />} />
 
-
-        {/* <Route element={<AdminPublicRoute />}>
-        </Route> */}
       </Routes>
     </>
   )

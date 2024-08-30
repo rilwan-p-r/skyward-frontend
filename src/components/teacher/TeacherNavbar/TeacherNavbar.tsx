@@ -1,23 +1,40 @@
-import React, { useState, } from 'react';
+import React, { useEffect, useState, } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../../redux/store/store';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
-import { logout } from '../../../redux/slices/teacherSlices/TeacherSlices';
+import { logout, setTeacherInfo } from '../../../redux/slices/teacherSlices/TeacherSlices';
 import { toast } from 'react-toastify';
 import { teacherLogout } from '../../../api/teacher/teacherAuth';
+import { getTeacherById } from '../../../api/teacher/getTeacherById';
 
 const TeacherNavbar: React.FC = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch()
     const teacher = useSelector((state: RootState) => state.teacherInfo.teacherInfo);
+    const teacherId = teacher?._id
+
+    useEffect(() => {
+        if (teacherId) {
+            const fetchUpdatedTeacherInfo = async () => {
+                try {
+                    const updatedTeacher = await getTeacherById(teacherId); 
+                    console.log('updatedTeacher',updatedTeacher);
+                    dispatch(setTeacherInfo(updatedTeacher)); 
+                } catch (error) {
+                    console.error('Error fetching updated teacher info:', error);
+                }
+            };
+
+            fetchUpdatedTeacherInfo();
+        }
+    }, [teacherId, dispatch]);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
-
     const handleLogout = async () => {
         const result = await Swal.fire({
             title: "Question",
@@ -41,7 +58,7 @@ const TeacherNavbar: React.FC = () => {
     return (
         <>
             <header className="bg-white shadow-md">
-                <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+                <div className="container mx-auto px-0 py-3 flex justify-between items-center">
                     <div className="flex items-center space-x-8">
                         <div className="text-3xl font-bold cursor-pointer" onClick={() => navigate('/')}>Skywards</div>
                     </div>

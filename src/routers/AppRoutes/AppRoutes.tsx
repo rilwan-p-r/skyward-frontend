@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import HomeRoute from '../MainRoutes/MainRoutes'
 import AdminRoutes from '../AdminRoutes/AdminRoutes'
 import StudentRoutes from '../StudentRoutes/StudentRoutes'
-import TeacherRoutes from '../TeacherRoutes/TeacherRoutes'
+import TeacherRoutes from '../teacherRoutes/TeacherRoutes'
 
 const AppRoutes = () => {
     return (

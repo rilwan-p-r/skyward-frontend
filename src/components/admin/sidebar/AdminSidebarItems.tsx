@@ -1,7 +1,8 @@
 import { Home } from "lucide-react";
 import { GiTeacher } from "react-icons/gi";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
-import { FaUserGraduate, FaUsers } from "react-icons/fa"; // Import a student icon
+import { FaUserGraduate, FaUsers, FaBook } from "react-icons/fa";
+import { MdOutlineClass } from "react-icons/md"; 
 
 import Sidebar, { SidebarItem } from "./Sidebar";
 
@@ -40,6 +41,18 @@ const AdminSidebar = () => {
           text="Students List"
           active
           to="/admin/studentslist"
+        />
+        <SidebarItem
+          icon={<MdOutlineClass size={20} />}
+          text="Batches"
+          active
+          to="/admin/batches"
+        />
+        <SidebarItem
+          icon={<FaBook size={20} />}
+          text="Courses"
+          active
+          to="/admin/courses"
         />
       </Sidebar>
     </>

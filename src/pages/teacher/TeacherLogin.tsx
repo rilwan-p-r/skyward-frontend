@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,} from "react";
 import { Label } from "../../components/ui/input/label";
 import { Input } from "../../components/ui/input/input";
 import { cn } from "../../lib/utils";
@@ -11,38 +11,55 @@ import { teacherLogin } from "../../api/teacher/teacherAuth";
 import { toast } from "react-toastify";
 import { setTeacherInfo } from "../../redux/slices/teacherSlices/TeacherSlices";
 import { useDispatch } from "react-redux";
+import { useFormik } from "formik";
+import { loginSchema } from "../../schemas";
 
+interface loginValues {
+    email: string;
+    password: string
+}
 export function TeacherLogin() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const teacherInfo = useSelector((state: RootState) => state?.teacherInfo?.teacherInfo);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     useEffect(() => {
         if (teacherInfo) {
             navigate('/teacher')
-        } 
+        }
     }, [teacherInfo, navigate])
 
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
-        e.preventDefault();
+    const handleSubmit = async (values: loginValues) => {
         try {
-            const response = await teacherLogin({ email, password });
+            const response = await teacherLogin(values);
             console.log(response);
 
-            if (response?.status == 201) {  
+            if (response?.status == 201) {
                 toast.success('login success');
                 dispatch(setTeacherInfo(response.data))
                 navigate('/teacher/');
-              }else{
+            } else {
                 toast.error('invalid credintial')
-              }
-        } 
-         catch (error) {
+            }
+        }
+        catch (error) {
             console.error('Login failed:', error);
         }
     };
 
+    const formik = useFormik<loginValues>({
+        initialValues: {
+            email: '',
+            password: ''
+        },
+        validationSchema: loginSchema,
+        onSubmit: (values) => {
+            handleSubmit(values);
+        },
+    });
+
+    const handleForgotPassword = () => {
+        navigate('/teacher/forgotPassword');
+    };
     return (
         <>
             <div className="flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start md:ml-40 mt-10 md:mt-32">
@@ -57,15 +74,21 @@ export function TeacherLogin() {
                         Please login with your credentials to continue. We're excited to have you back!
                     </p>
 
-                    <form className="my-8" onSubmit={handleSubmit}>
+                    <form className="my-8" onSubmit={formik.handleSubmit}>
                         <LabelInputContainer className="mb-4">
                             <Label htmlFor="email">Email Address</Label>
                             <Input
                                 id="email"
+                                name="email"
                                 placeholder="Enter your email Id here"
                                 type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)} />
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.email}
+                            />
+                            {formik.touched.email && formik.errors.email && (
+                                <div className="text-red-500">{formik.errors.email}</div>
+                            )}
                         </LabelInputContainer>
                         <LabelInputContainer className="mb-4">
                             <Label htmlFor="password">Password</Label>
@@ -73,9 +96,24 @@ export function TeacherLogin() {
                                 id="password"
                                 placeholder="Enter your password here"
                                 type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)} />
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.password}
+                            />
+                            {formik.touched.password && formik.errors.password && (
+                                <div className="text-red-500">{formik.errors.password}</div>
+                            )}
                         </LabelInputContainer>
+
+                        <div className="mb-4 text-right">
+                            <button
+                                type="button"
+                                onClick={handleForgotPassword}
+                                className="text-sm text-blue-600 hover:underline"
+                            >
+                                Forgot password?
+                            </button>
+                        </div>
 
                         <button
                             className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"

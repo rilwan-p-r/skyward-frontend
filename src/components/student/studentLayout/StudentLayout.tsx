@@ -4,7 +4,7 @@ import StudentNavbar from '../studentNavbar/StudentNavbar'
 const StudentLayout = () => {
   return (
     <>
-      <StudentNavbar/>
+      <StudentNavbar/>  
       <main>
       <Outlet/>
       </main>
