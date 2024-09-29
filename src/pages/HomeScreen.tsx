@@ -3,7 +3,7 @@ import { FlipWordsDemo } from "../components/main/FlipWords";
 import { MovingBorderDemo } from "../components/main/MovingBorderDemo";
 import { Footer } from "../components/main/Footer";
 import ScrollingReviews from "../components/main/review/ReviewsList";
-import { CardDemo } from "../components/main/event/CardDemo";
+import { CardDemo } from "../components/main/eventss/CardDemo";
 
 const HomeScreen = () => {
   return (
