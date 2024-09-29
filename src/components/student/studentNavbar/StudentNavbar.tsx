@@ -8,6 +8,8 @@ import { logout, setStudentInfo } from '../../../redux/slices/studentSlices/Stud
 import { toast } from 'react-toastify';
 import { studentLogout } from '../../../api/student/studentAuth';
 import { getStudentById } from '../../../api/student/getStudentById';
+import { getBatchAndCourseByBatchId } from '../../../api/student/getBatchAndCourseByBatchId';
+import { LocalStudentInterface } from '../../../interfaces/LocalStudentInterface';
 
 const StudentNavbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,23 +17,48 @@ const StudentNavbar: React.FC = () => {
   const dispatch = useDispatch()
   const student = useSelector((state: RootState) => state.studentInfo.studentInfo);
   const studentId = student?._id;
-  console.log(studentId);
   
   useEffect(() => {
-    if (studentId) {
-        const fetchUpdatedStudentInfo = async () => {
+    const fetchUpdatedStudentInfo = async () => {
+        if (studentId) {
             try {
-                const updatedStudent = await getStudentById(studentId); 
-                console.log('updatedStudent',updatedStudent);
-                dispatch(setStudentInfo(updatedStudent)); 
-            } catch (error) {
-                console.error('Error fetching updated teacher info:', error);
-            }
-        };
+                const updatedStudent = await getStudentById(studentId);
+                if (updatedStudent?.status === 200) {
+                    const { _id, firstName, lastName, email, imageUrl, batchId } = updatedStudent.data;
+                    
+                    let studentData: LocalStudentInterface = {
+                        _id,
+                        firstName,
+                        lastName,
+                        email,
+                        imageUrl,
+                        batchId,
+                    };
 
-        fetchUpdatedStudentInfo();
-    }
+                    // Fetch batch and course details
+                    if (batchId) {
+                        const batchAndCourseResponse = await getBatchAndCourseByBatchId(batchId);
+                        
+                        if (batchAndCourseResponse?.data) {
+                            studentData = {
+                                ...studentData,
+                                courseDetails: batchAndCourseResponse.data.courseId,
+                                batchDetails: batchAndCourseResponse.data.batch
+                            };
+                        }
+                    }
+
+                    dispatch(setStudentInfo(studentData));
+                }
+            } catch (error) {
+                console.error('Error fetching updated student info:', error);
+            }
+        }
+    };
+
+    fetchUpdatedStudentInfo();
 }, [studentId, dispatch]);
+
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
@@ -95,7 +122,7 @@ const StudentNavbar: React.FC = () => {
         {menuOpen && student && (
           <div className="md:hidden" id="menu">
             <div className="px-4 py-2 border-b">
-              <img src={student.profilePic} alt="Profile" className="w-10 h-10 rounded-full mb-2" />
+              <img src={student.imageUrl} alt="Profile" className="w-10 h-10 rounded-full mb-2" />
               <p className="font-semibold">{student.firstName} {student.lastName}</p>
               <p className="text-sm text-gray-600">{student.email}</p>
             </div>

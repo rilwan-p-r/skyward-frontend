@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormikErrors, useFormik } from 'formik';
 import TeacherSidebar from '../../components/teacher/teacherSidebar/TeacherSidebar';
 import { FaBars, FaCheck, FaTimes, FaUndo } from 'react-icons/fa';
-import { getBatchesAndCoursesByTeacherId } from '../../api/student/fetchBatchesByTeacherId';
-import { getStudentsByBatchId } from '../../api/admin/getStudentsByBatchId';
+import { getBatchesAndCoursesByTeacherId } from '../../api/teacher/fetchBatchesByTeacherId';
+import { getStudentsByBatchId } from '../../api/teacher/getStudentsByBatchId';
 import { submitAttendanceData } from '../../api/teacher/submitAttendanceData';
 import { checkAttendanceExists } from '../../api/teacher/checkAttendanceExists';
 import { useSelector } from 'react-redux';
@@ -20,6 +21,7 @@ const TakeAttendance: React.FC = () => {
     const [selectedBatch, setSelectedBatch] = useState<string>('');
     const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
     const [attendanceExists, setAttendanceExists] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const teacher = useSelector((state: RootState) => state.teacherInfo.teacherInfo) as LocalTeacherInterface;
     const initialCheckDone = useRef(false);
     const formikRef = useRef<typeof formik | null>(null);
@@ -34,13 +36,14 @@ const TakeAttendance: React.FC = () => {
 
     useEffect(() => {
         if (formik) {
-            formikRef.current = formik; // Set it after formik is initialized
+            formikRef.current = formik;
         }
     }, [formik]);
 
 
     const fetchStudentsByBatchId = useCallback(async (batchId: string) => {
         try {
+            setIsLoading(true);
             const response = await getStudentsByBatchId(batchId);
             if (response && response.data) {
                 const students = response.data.map((student: StudentAttendanceInterface) => ({
@@ -48,12 +51,16 @@ const TakeAttendance: React.FC = () => {
                     present: null,
                     remarks: '',
                 }));
-                formikRef.current?.setFieldValue('attendanceRecords', students); // Safe access with optional chaining
+                formikRef.current?.setFieldValue('attendanceRecords', students); // Use formikRef here
             }
         } catch (error) {
             console.error('Error fetching students:', error);
+        }finally{
+            setIsLoading(false);
         }
-    }, []);
+    }, []); 
+    
+    
 
     const checkAttendance = useCallback(async () => {
         if (selectedBatch && date && !initialCheckDone.current) {
@@ -72,6 +79,7 @@ const TakeAttendance: React.FC = () => {
                 message.error("Failed to check attendance. Please try again.");
             }
         }
+
     }, [selectedBatch, date, fetchStudentsByBatchId]);
 
     useEffect(() => {
@@ -185,6 +193,18 @@ const TakeAttendance: React.FC = () => {
         }
     }
 
+    const ShimmerLoading = () => (
+        <div className="animate-pulse">
+            {[...Array(5)].map((_, index) => (
+                <div key={index} className="flex items-center space-x-4 mb-4">
+                    <div className="w-1/4 h-6 bg-gray-300 rounded"></div>
+                    <div className="w-1/4 h-6 bg-gray-300 rounded"></div>
+                    <div className="w-1/2 h-6 bg-gray-300 rounded"></div>
+                </div>
+            ))}
+        </div>
+    );
+
     return (
         <div className="flex h-screen bg-gray-100">
             <TeacherSidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
@@ -230,8 +250,13 @@ const TakeAttendance: React.FC = () => {
 
 
                 {/* Students Table */}
-                {!attendanceExists && formik.values.attendanceRecords.length > 0 && (
-                    <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                {isLoading ? (
+                    <div className="bg-white shadow-md rounded-lg overflow-hidden p-4">
+                        <ShimmerLoading />
+                    </div>
+                ) : (
+                    !attendanceExists && formik.values.attendanceRecords.length > 0 && (
+                        <div className="bg-white shadow-md rounded-lg overflow-hidden">
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                                 <tr>
@@ -283,6 +308,7 @@ const TakeAttendance: React.FC = () => {
 
                         </table>
                     </div>
+                    )
                 )}
 
                 {/* Action Buttons */}

@@ -13,6 +13,8 @@ import { useDispatch } from "react-redux";
 import { setStudentInfo } from "../../redux/slices/studentSlices/StudentSlices";
 import { useFormik } from "formik";
 import { loginSchema } from "../../schemas";
+import { getBatchAndCourseByBatchId } from "../../api/student/getBatchAndCourseByBatchId";
+import { LocalStudentInterface } from "../../interfaces/LocalStudentInterface";
 
 interface loginValues{
     email:string;
@@ -29,22 +31,40 @@ export function StudentLogin() {
         }
     }, [studentInfo, navigate]);
 
-    const handleSubmit = async (values:loginValues) => {
+    const handleSubmit = async (values: loginValues) => {
         try {
             const response = await studentLogin(values);
             console.log(response);
 
-            if (response?.status == 201) {
-                toast.success('login success');
-                dispatch(setStudentInfo(response.data))
+            if (response?.status === 201 && response.data) {
+                let studentData = response.data as LocalStudentInterface;
+
+                // Fetch batch and course details
+                if (studentData.batchId) {
+                    const batchAndCourseResponse = await getBatchAndCourseByBatchId(studentData.batchId);
+                    
+                    if (batchAndCourseResponse?.data) {
+                        studentData = {
+                            ...studentData,
+                            courseDetails: batchAndCourseResponse.data.courseId.course,
+                            batchDetails: batchAndCourseResponse.data.batch
+                        };
+                    }
+                }
+                console.log('studentData',studentData);
+                
+                dispatch(setStudentInfo(studentData));
+                toast.success('Login success');
                 navigate('/student/');
             } else {
-                toast.error('invalid credintial')
+                toast.error('Invalid credentials');
             }
         } catch (error) {
             console.error('Login failed:', error);
+            toast.error('Login failed. Please try again.');
         }
     };
+
 
     const formik = useFormik<loginValues>({
         initialValues: {

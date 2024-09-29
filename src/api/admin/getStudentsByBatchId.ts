@@ -2,9 +2,9 @@ import Api from '../axiosConfig';
 import adminEndpoint from '../../endpoints/adminEndpoints/AdminEndpoint';
 import * as axios from 'axios';
 
-export const getStudentsByBatchId = async (courseId: string) => {
+export const getStudentsByBatchId = async (batchId: string) => {
   try {
-    const response = await Api.get(`${adminEndpoint.getStudentsByBatchId}/${courseId}`);
+    const response = await Api.get(`${adminEndpoint.getStudentsByBatchId}/${batchId}`);
     console.log('studentt',response);
     
     return response.data

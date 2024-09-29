@@ -5,9 +5,7 @@ import studentEndpoint from '../../endpoints/studentEndpoints/StudentEndpoint';
 export const getStudentById = async (studentId: string) => {
   try {
     const response = await Api.get(`${studentEndpoint.getStudentById}/${studentId}`);
-    console.log('sundent',response);
-    
-    return response.data
+    return response
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return error.response;

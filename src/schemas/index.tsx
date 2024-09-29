@@ -18,8 +18,8 @@ export const addTeacherSchema = yup.object().shape({
   email: yup
     .string()
     .email('Please enter a valid email')
-    .required('Email is required')
-    .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Email must be a valid Gmail address'),
+    .required('Email is required'),
+    // .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Email must be a valid Gmail address'),
   subject: yup
     .string()
     .required('Required')
@@ -73,8 +73,8 @@ export const addStudentSchema = yup.object().shape({
   email: yup
     .string()
     .email('Please enter a valid email')
-    .required('Email is required')
-    .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Email must be a valid Gmail address'),
+    .required('Email is required'),
+    // .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Email must be a valid Gmail address'),
   phoneNumber: yup.string()
     .matches(/^[0-9]+$/, 'Phone number must only contain digits')
     .min(10, 'Phone number must be at least 10 digits')
@@ -167,8 +167,8 @@ export const loginSchema = yup.object().shape({
   email: yup
     .string()
     .email('Please enter a valid email')
-    .required('Email is required')
-    .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Email must be a valid Gmail address'),
+    .required('Email is required'),
+    // .matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, 'Email must be a valid Gmail address'),
   password: yup
     .string()
     .required('Password is required')

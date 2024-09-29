@@ -4,6 +4,10 @@ import StudentLayout from '../../components/student/studentLayout/StudentLayout'
 import StudentProtectedRoute from '../protectedRoutes/studentProtectedRoute/StudentProtectedRoute'
 import { StudentForgotPassword } from '../../pages/student/studentForgotPassword'
 import ViewMyAttendance from '../../pages/student/viewMyAttendance'
+import StudentBatchChat from '../../pages/student/studentBatchChat'
+import StudentLeaveApply from '../../pages/student/leaveApplyStudent'
+import MCQCompetitionListStudent from '../../pages/student/mcqCompetitionListStudent'
+import StudentReview from '../../pages/student/StudentReview'
 
 
 const StudentRoutes = () => {
@@ -14,6 +18,10 @@ const StudentRoutes = () => {
                     <Route element={<StudentLayout />}>
                         <Route path='/' element={<StudentHome />} />
                         <Route path='viewMyAttendance' element={<ViewMyAttendance />} />
+                        <Route path='BatchChat' element={<StudentBatchChat />} />
+                        <Route path='studentLeaveApply' element={<StudentLeaveApply />} />
+                        <Route path='MCQCompetitionList' element={<MCQCompetitionListStudent />} />
+                        <Route path='writeReview' element={<StudentReview />} />
                     </Route>
                 </Route>
 

@@ -8,6 +8,9 @@ import AddStudent from '../../pages/admin/AddStudent'
 import StudentsList from '../../pages/admin/StudentList '
 import BatchList from '../../pages/admin/batchList'
 import CourseList from '../../pages/admin/courseList'
+import AdminMCQCompetitionList from '../../pages/admin/AdminMCQCompetitions'
+import AddMCQCompetition from '../../pages/admin/AddMCQCompetition'
+import AdminAnnouncement from '../../pages/admin/AdminAnnouncement'
 
 
 
@@ -23,6 +26,9 @@ const AdminRoutes = () => {
           <Route path="teacherslist" element={<TeachersList />} />
           <Route path="studentslist" element={<StudentsList />} />
           <Route path="batches" element={<BatchList />} />
+          <Route path="AdminMCQCompetitionList" element={<AdminMCQCompetitionList />} />
+          <Route path="AddMCQCompetition" element={<AddMCQCompetition />} />
+          <Route path="AdminAnnouncement" element={<AdminAnnouncement />} />
         </Route>
           <Route path="Courses" element={<CourseList />} />
 

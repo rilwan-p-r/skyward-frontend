@@ -15,14 +15,25 @@ const TeacherNavbar: React.FC = () => {
     const dispatch = useDispatch()
     const teacher = useSelector((state: RootState) => state.teacherInfo.teacherInfo);
     const teacherId = teacher?._id
+console.log(teacher);
 
     useEffect(() => {
         if (teacherId) {
             const fetchUpdatedTeacherInfo = async () => {
                 try {
                     const updatedTeacher = await getTeacherById(teacherId); 
-                    console.log('updatedTeacher',updatedTeacher);
-                    dispatch(setTeacherInfo(updatedTeacher)); 
+                    if(updatedTeacher?.status===200){
+                        console.log('updatedTeacher',updatedTeacher);
+                        const { _id, firstName, lastName, email, imageUrl } = updatedTeacher.data;
+                        const obj = {
+                            _id,
+                            firstName,
+                            lastName,
+                            email,
+                            imageUrl
+                          };
+                        dispatch(setTeacherInfo(obj)); 
+                    }
                 } catch (error) {
                     console.error('Error fetching updated teacher info:', error);
                 }
@@ -58,7 +69,7 @@ const TeacherNavbar: React.FC = () => {
     return (
         <>
             <header className="bg-white shadow-md">
-                <div className="container mx-auto px-0 py-3 flex justify-between items-center">
+                <div className="container mx-auto px-4 py-3 flex justify-between items-center">
                     <div className="flex items-center space-x-8">
                         <div className="text-3xl font-bold cursor-pointer" onClick={() => navigate('/')}>Skywards</div>
                     </div>

@@ -1,10 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaTimes, FaClipboardList, FaTasks, FaGraduationCap, FaCalendarAlt, FaComments } from 'react-icons/fa';
+import { FaTimes, FaClipboardList,  FaGraduationCap, FaCalendarAlt, FaComments } from 'react-icons/fa';
+// FaTasks,
 import { RiHomeSmile2Line } from "react-icons/ri";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store/store';
 import { LocalStudentInterface } from '../../../interfaces/LocalStudentInterface';
+import { MdOutlineReviews } from "react-icons/md";
+
 
 interface StudentSidebarProps {
     sidebarOpen: boolean;
@@ -25,15 +28,17 @@ const StudentSidebar: React.FC<StudentSidebarProps> = ({ sidebarOpen, toggleSide
             <div className="flex flex-col items-center mb-8">
                 <img src={student.imageUrl} alt="Profile" className="w-24 h-24 rounded-full mb-2" />
                 <h2 className="text-xl font-bold">{`${student.firstName} ${student.lastName}`}</h2>
+                <h2 className="text-xl font-bold">{`${student.courseDetails?.course} ${student.batchDetails}`}</h2>
                 <p className="text-sm text-gray-400">{student.email}</p>
             </div>
             <nav>
                 <SidebarLink icon={<RiHomeSmile2Line />} text="Home" to="/student/" />
                 <SidebarLink icon={<FaClipboardList />} text="Attendance" to="/student/viewMyAttendance" />
-                <SidebarLink icon={<FaTasks />} text="Marklist" to="/student/marklist" />
-                <SidebarLink icon={<FaGraduationCap />} text="MCQ Competition" to="/student/mcq" />
-                <SidebarLink icon={<FaCalendarAlt />} text="Apply Leave" to="/student/leave" />
-                <SidebarLink icon={<FaComments />} text="Class Group Chat" to="/student/chat" />
+                {/* <SidebarLink icon={<FaTasks />} text="Marklist" to="/student/marklist" /> */}
+                <SidebarLink icon={<FaGraduationCap />} text="MCQ Competition" to="/student/MCQCompetitionList" />
+                <SidebarLink icon={<FaCalendarAlt />} text="Apply Leave" to="/student/studentLeaveApply" />
+                <SidebarLink icon={<FaComments />} text="Class Group Chat" to="/student/BatchChat" />
+                <SidebarLink icon={<MdOutlineReviews />} text="Write review" to="/student/writeReview" />
             </nav>
         </div>
     );

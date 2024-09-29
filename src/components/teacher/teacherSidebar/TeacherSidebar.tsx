@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaTimes, FaClipboardList, FaTasks, FaGraduationCap, FaCalendarAlt, FaComments } from 'react-icons/fa';
+import { FaTimes, FaClipboardList, FaTasks,FaComments } from 'react-icons/fa';
 import { RiHomeSmile2Line } from "react-icons/ri";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store/store';
@@ -32,10 +32,11 @@ const TeacherSidebar: React.FC<TeacherSidebarProps> = ({ sidebarOpen, toggleSide
             <nav>
                 <SidebarLink icon={<RiHomeSmile2Line />} text="Home" to="/teacher/" />
                 <SidebarLink icon={<FaClipboardList />} text="Take Attendance" to="/teacher/takeAttendance" />
-                <SidebarLink icon={<FaTasks />} text="Assign Tasks" to="#" />
-                <SidebarLink icon={<FaGraduationCap />} text="Update Marksheets" to="#" />
-                <SidebarLink icon={<FaCalendarAlt />} text="Apply for Leave" to="#" />
-                <SidebarLink icon={<FaComments />} text="Class Group Chats" to="#" />
+                {/* <SidebarLink icon={<FaGraduationCap />} text="Assign Tasks" to="#" /> */}
+                <SidebarLink icon={<FaTasks />} text="Students Leave Request" to="/teacher/studentsLeaveRequest" />
+                {/* <SidebarLink icon={<FaGraduationCap />} text="Update Marksheets" to="#" /> */}
+                {/* <SidebarLink icon={<FaCalendarAlt />} text="Apply for Leave" to="#" /> */}
+                <SidebarLink icon={<FaComments />} text="Class Group Chats" to="/teacher/TeacherBatchChat" />
             </nav>
         </div>
     );

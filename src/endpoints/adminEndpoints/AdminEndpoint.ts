@@ -15,5 +15,9 @@ const adminEndpoint={
     editStudent:'admin/editStudent',
     editTeacher:'admin/editTeacher',
     editBatch:'admin/editBatch',
+    addMCQCompetition:'admin/addMCQCompetition',
+    getMCQCompetition:'admin/getMCQCompetition',
+    createAnnouncement:'admin/createAnnouncement',
+    getAnnouncements:'admin/getAnnouncements',
 }
 export default adminEndpoint

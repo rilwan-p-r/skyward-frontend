@@ -2,14 +2,12 @@ import Api from '../axiosConfig';
 import * as axios from 'axios';
 import teacherEndpoint from '../../endpoints/teacherEndpoints/TeacherEndpoint';
 
-export const getBatchesAndCoursesByTeacherId = async (teacherId:unknown) => {
+export const getAnnouncements = async () => {
   try {
-    console.log('iddddddddddd',teacherId);
+    const response = await Api.get(teacherEndpoint.getAnnouncements);
+    console.log('AnnouncementsList',response);
+    return response.data
     
-    const response = await Api.get(`${teacherEndpoint.getBatchesAndCoursesByTeacherId}/${teacherId}`);
-    console.log('BatchesByTeacherId',response);
-    
-    return response
   } catch (error) {
     if (axios.isAxiosError(error)) {
       return error.response;

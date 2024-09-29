@@ -4,10 +4,8 @@ import * as axios from 'axios';
 import studentEndpoint from '../../endpoints/studentEndpoints/StudentEndpoint';
 
 export const studentForgotPassword = async (body: { email: string}): Promise<AxiosResponse<unknown> | undefined> => {
-    console.log('email',body.email);
     try {
         const response = await Api.post(studentEndpoint.forgotPassword, body);
-        console.log(response);
         return response;
 
     } catch (error) {

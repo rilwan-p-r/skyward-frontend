@@ -24,17 +24,19 @@ export function TeacherLogin() {
     const teacherInfo = useSelector((state: RootState) => state?.teacherInfo?.teacherInfo);
     useEffect(() => {
         if (teacherInfo) {
-            navigate('/teacher')
+            navigate('/teacher/')
         }
     }, [teacherInfo, navigate])
 
     const handleSubmit = async (values: loginValues) => {
         try {
             const response = await teacherLogin(values);
-            console.log(response);
+            console.log('teacherLoginResponse',response);
 
             if (response?.status == 201) {
                 toast.success('login success');
+                console.log('login',response);
+                
                 dispatch(setTeacherInfo(response.data))
                 navigate('/teacher/');
             } else {

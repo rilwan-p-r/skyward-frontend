@@ -1,10 +1,10 @@
-import { Home } from "lucide-react";
+import { Award, Home, MicVocal } from "lucide-react";
 import { GiTeacher } from "react-icons/gi";
 import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 import { FaUserGraduate, FaUsers, FaBook } from "react-icons/fa";
 import { MdOutlineClass } from "react-icons/md"; 
-
 import Sidebar, { SidebarItem } from "./Sidebar";
+
 
 const AdminSidebar = () => {
   return (
@@ -53,6 +53,18 @@ const AdminSidebar = () => {
           text="Courses"
           active
           to="/admin/courses"
+        />
+        <SidebarItem
+          icon={<Award size={20} />}
+          text="MCQ Competition"
+          active
+          to="/admin/AdminMCQCompetitionList"
+        />
+        <SidebarItem
+          icon={<MicVocal size={20} />}
+          text="Announcement"
+          active
+          to="/admin/AdminAnnouncement"
         />
       </Sidebar>
     </>

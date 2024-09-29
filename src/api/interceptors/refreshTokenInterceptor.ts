@@ -31,6 +31,7 @@ interface FailedRequest {
       }
   
       const errorMessage = (error.response?.data as { message?: string })?.message;
+      console.log(errorMessage);
   
       if (errorMessage === 'Admin Token Not Found' ||
         errorMessage === 'Student Token Not Found' ||
@@ -60,7 +61,6 @@ interface FailedRequest {
   
       if (error.response?.status === 401 && !originalRequest._retry) {
         const errorMessage = (error.response.data as { message?: string })?.message;
-  console.log('errrrrrrrrrr',errorMessage);
   
         let refreshPath: string | undefined;
         let userInfoKey: string | undefined;
@@ -81,11 +81,11 @@ interface FailedRequest {
           return Promise.reject(error);
         } else if (errorMessage === 'Invalid Student Refresh Token') {
           localStorage.removeItem('studentInfo');
-          window.location.href = '/StudentLogin';
+          window.location.href = '/studentLogin';
           return Promise.reject(error);
         } else if (errorMessage === 'Invalid Teacher Refresh Token') {
           localStorage.removeItem('teacherInfo');
-          window.location.href = '/teacherLogin';
+          window.location.href = '/teacherLogin'; 
           return Promise.reject(error);
         } else {
           return Promise.reject(error);

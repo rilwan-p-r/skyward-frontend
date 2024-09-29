@@ -1,20 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaBell, FaBars } from 'react-icons/fa';
 import StudentSidebar from '../../components/student/studentSidebar/StudentSidebar';
-
-interface Notification {
-    id: number;
-    message: string;
-}
+import { getAnnouncements } from '../../api/student/getAnnouncements';
+import { Announcement } from '../../interfaces/Announcements';
 
 const StudentHome: React.FC = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [notifications] = useState<Notification[]>([
-        // Sample notifications
-        { id: 1, message: "New assignment posted" },
-        { id: 2, message: "Upcoming exam scheduled" },
-        { id: 3, message: "Reminder: Class tomorrow at 9 AM" },
-    ]);
+    const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+
+    const fetchAnnouncement = async () => {
+        try {
+            const response = await getAnnouncements();
+            setAnnouncements(response);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchAnnouncement();
+    }, []);
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -26,9 +31,19 @@ const StudentHome: React.FC = () => {
             <div className="flex-1 flex flex-col overflow-hidden">
                 <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4">
                     <div className="max-w-7xl mx-auto">
-                        <Header toggleSidebar={toggleSidebar} notificationCount={notifications.length} />
-                        <NotificationList notifications={notifications} />
-                        {/* Add any other student-specific components here */}
+                        <Header toggleSidebar={toggleSidebar} notificationCount={announcements.length} />
+                        <div className="bg-white shadow rounded-lg divide-y">
+                            <h3 className="text-xl font-semibold p-4 border-b">Recent Announcements</h3>
+                            {announcements.map((announcement) => (
+                                <div key={announcement._id} className="p-4 hover:bg-gray-50">
+                                    <h4 className="font-semibold">{announcement.title}</h4>
+                                    <p className="mt-2">{announcement.content}</p>
+                                    <p className="text-sm text-gray-500 mt-2">
+                                        Announced: {new Date(announcement.createdAt).toLocaleDateString()}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </main>
             </div>
@@ -55,21 +70,6 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, notificationCount }) => 
                 {notificationCount}
             </span>
         </div>
-    </div>
-);
-
-interface NotificationListProps {
-    notifications: Notification[];
-}
-
-const NotificationList: React.FC<NotificationListProps> = ({ notifications }) => (
-    <div className="bg-white shadow rounded-lg divide-y">
-        <h3 className="text-xl font-semibold p-4 border-b">Recent Notifications</h3>
-        {notifications.map((notification) => (
-            <div key={notification.id} className="p-4 hover:bg-gray-50">
-                <p>{notification.message}</p>
-            </div>
-        ))}
     </div>
 );
 
