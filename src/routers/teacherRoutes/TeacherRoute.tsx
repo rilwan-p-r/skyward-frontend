@@ -7,7 +7,7 @@ import TakeAttendance from '../../pages/teacher/TakeAttendance'
 import TeacherBatchChat from '../../pages/teacher/TeacherBatchChat'
 import StudentsLeaveRequest from '../../pages/teacher/studentsLeaveRequest'
 
-const TeacherRoutes = () => {
+const TeacherRoute = () => {
     return (
         <>
             <Routes>
@@ -28,4 +28,4 @@ const TeacherRoutes = () => {
     )
 }
 
-export default TeacherRoutes
+export default TeacherRoute

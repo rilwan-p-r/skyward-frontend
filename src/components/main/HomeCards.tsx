@@ -1,5 +1,5 @@
 "use client";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../lib/utils";
 import { useState } from "react";
 interface CollegeContentItem {
     title: string;
@@ -75,7 +75,7 @@ function Card({ item }:{item:CollegeContentItem}) {
   );
 }
 
-export function CardDemo(): JSX.Element {
+export function HomeCards(): JSX.Element {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {collegeContent.map((item, index) => (

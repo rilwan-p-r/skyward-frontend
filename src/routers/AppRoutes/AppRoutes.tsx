@@ -3,7 +3,8 @@ import { Route, Routes } from 'react-router-dom'
 import HomeRoute from '../MainRoutes/MainRoutes'
 import AdminRoutes from '../AdminRoutes/AdminRoutes'
 import StudentRoutes from '../StudentRoutes/StudentRoutes'
-import TeacherRoutes from '../teacherRoutes/TeacherRoutes'
+import TeacherRoute from '../teacherRoutes/TeacherRoute'
+
 
 const AppRoutes = () => {
     return (
@@ -12,7 +13,7 @@ const AppRoutes = () => {
                 <Route path='/*' element={<HomeRoute />} />
                 <Route path='/admin/*' element={<AdminRoutes />} />
                 <Route path='/student/*' element={<StudentRoutes />} />
-                <Route path='/teacher/*' element={<TeacherRoutes />} />
+                <Route path='/teacher/*' element={<TeacherRoute />} />
             </Routes>
         </>
     )

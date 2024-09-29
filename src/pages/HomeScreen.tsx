@@ -3,7 +3,9 @@ import { FlipWordsDemo } from "../components/main/FlipWords";
 import { MovingBorderDemo } from "../components/main/MovingBorderDemo";
 import { Footer } from "../components/main/Footer";
 import ScrollingReviews from "../components/main/review/ReviewsList";
-import { CardDemo } from "../components/main/eventss/CardDemo";
+import { HomeCards } from "../components/main/HomeCards";
+
+
 
 const HomeScreen = () => {
   return (
@@ -34,7 +36,7 @@ const HomeScreen = () => {
         <h1 className="font-bold text-2xl">Upcoming events</h1>
       </div>
       <div className="mb-8 ml-4">
-        <CardDemo />
+        <HomeCards />
       </div>
 
       <div className="w-full h-full bg-gray-100 py-4">
