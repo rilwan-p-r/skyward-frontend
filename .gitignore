@@ -1,5 +1,6 @@
-# dotenv environment variable filesignore
+#env file
 .env
+
 # Logs
 logs
 *.log
