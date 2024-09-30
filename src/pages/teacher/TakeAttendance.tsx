@@ -25,6 +25,7 @@ const TakeAttendance: React.FC = () => {
     const teacher = useSelector((state: RootState) => state.teacherInfo.teacherInfo) as LocalTeacherInterface;
     const initialCheckDone = useRef(false);
     const formikRef = useRef<typeof formik | null>(null);
+// console.log('hlo');
 
     const formik = useFormik({
         initialValues: {
