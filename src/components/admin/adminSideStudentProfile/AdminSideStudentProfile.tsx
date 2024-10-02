@@ -6,19 +6,17 @@ interface AdminSideStudentProfileProps {
 const AdminSideStudentProfile:React.FC<AdminSideStudentProfileProps>= ({student}) => {
   return (
     <>
-      <div className="bg-white shadow-md rounded-lg p-6">
-      <div className="flex items-center mb-4">
+      <div className="bg-white shadow-md rounded-lg p-6 transition-all duration-300 hover:shadow-lg">
+      <div className="flex flex-col items-center mb-6">
         <img
           src={student.imageUrl}
           alt={`${student.firstName} ${student.lastName}`}
-          className="w-20 h-20 rounded-full mr-4"
+          className="w-24 h-24 rounded-full mb-4 transition-transform duration-300 hover:scale-110"
         />
-        <div>
-          <h2 className="text-xl font-bold">
-            {student.firstName} {student.lastName}
-          </h2>
-          <p className="text-gray-500">{student.email}</p>
-        </div>
+        <h2 className="text-2xl font-bold text-center">
+          {student.firstName} {student.lastName}
+        </h2>
+        <p className="text-gray-500 text-center">{student.email}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -52,18 +50,6 @@ const AdminSideStudentProfile:React.FC<AdminSideStudentProfileProps>= ({student}
         <p className="text-gray-500 mb-1">Address</p>
         <p>{student.address}</p>
       </div>
-
-      {/* <div className="mt-4 flex justify-end">
-        <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
-            student.verified
-              ? 'bg-green-100 text-green-500'
-              : 'bg-yellow-100 text-yellow-500'
-          }`}
-        >
-          {student.verified ? 'Verified' : 'Unverified'}
-        </span>
-      </div> */}
     </div>
     </>
   )

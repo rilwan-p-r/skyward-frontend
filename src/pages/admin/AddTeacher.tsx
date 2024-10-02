@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import { addTeacherSchema } from '../../schemas';
 import AdminSidebar from '../../components/admin/sidebar/AdminSidebarItems';
 import { addTeacher } from '../../api/admin/addTeacher';
 import { toast } from 'react-toastify';
 import { TeacherFormValues } from '../../interfaces/teacherFormValue.interfaces';
-import { message } from 'antd';
+import { message, Upload } from 'antd';
+import { InboxOutlined } from '@ant-design/icons';
 
 interface SuccessMessage {
   message: string;
@@ -23,83 +24,6 @@ const textInputFields: { name: keyof Omit<TeacherFormValues, 'image'>; label: st
   { name: 'yearsOfExperience', label: 'Years of Experience', type: 'text' },
 ];
 
-const FileInput = ({
-  field,
-  handleFileChange,
-  fileType,
-  previewUrl,
-  touched,
-  error,
-}: {
-  field: keyof Pick<TeacherFormValues, 'image'>;
-  handleFileChange: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    fieldName: keyof TeacherFormValues
-  ) => void;
-  fileType: string;
-  previewUrl: string | null;
-  touched: boolean;
-  error?: string;
-}) => (
-  <div key={field} className="relative">
-    <label
-      htmlFor={field}
-      className="block text-sm font-medium text-gray-700 mb-2"
-    >
-      {field.charAt(0).toUpperCase() + field.slice(1)}
-    </label>
-    <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-      <div className="space-y-1 text-center">
-        {previewUrl ? (
-          <div className="mb-4">
-            <img
-              src={previewUrl}
-              alt="Preview"
-              className="mx-auto h-48 w-48 object-cover rounded-md shadow-md border-4 border-gray-200"
-            />
-          </div>
-        ) : (
-          <svg
-            className="mx-auto h-12 w-12 text-gray-400"
-            stroke="currentColor"
-            fill="none"
-            viewBox="0 0 48 48"
-            aria-hidden="true"
-          >
-            <path
-              d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        )}
-        <div className="flex text-sm text-gray-600">
-          <label
-            htmlFor={field}
-            className="relative cursor-pointer bg-white rounded-md font-medium text-black hover:text-gray-900 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-black"
-          >
-            <span>Upload an image</span>
-            <input
-              id={field}
-              name={field}
-              type="file"
-              className="sr-only"
-              accept={fileType}
-              onChange={(e) => handleFileChange(e, field)}
-            />
-          </label>
-          <p className="pl-1">or drag and drop</p>
-        </div>
-        <p className="text-xs text-gray-500">PNG, JPG up to 1MB</p>
-        {touched && error && (
-          <p className="mt-2 text-sm text-red-600">{error}</p>
-        )}
-      </div>
-    </div>
-  </div>
-);
-
 const AddTeacher = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -115,20 +39,17 @@ const AddTeacher = () => {
         formData.append(key, formattedValues[key as keyof TeacherFormValues] as string);
       }
     });
-    for (const pair of formData.entries()) {
-      console.log(pair[0] + ': ' + pair[1]);
-    }
+
     if (!values.image) {
       message.warning('Please upload an image');
       return;
     }
 
-
     try {
       const response = await addTeacher(formData) as ResponseData;
       console.log('Success:', response);
-      const message = response.data.message || 'Teacher added';
-      toast.success(message);
+      const msg = response.data.message || 'Teacher added';
+      toast.success(msg);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       formik.resetForm();
       setPreviewUrl(null);
@@ -136,7 +57,6 @@ const AddTeacher = () => {
       console.error('Error:', error);
       toast.error('Failed to add teacher');
     }
-
   };
 
   const formik = useFormik<TeacherFormValues>({
@@ -154,24 +74,27 @@ const AddTeacher = () => {
       handleSubmit(values);
     },
   });
-  console.log('dataaa', formik.values);
 
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    fieldName: keyof TeacherFormValues
-  ) => {
-    const file = e.currentTarget.files ? e.currentTarget.files[0] : null;
-    formik.setFieldValue(fieldName, file);
+  const uploadProps = {
+    name: 'file',
+    multiple: false,
+    maxCount: 1,
+    accept: 'image/png, image/jpeg, image/avif',
+    beforeUpload: (file: File) => {
+      formik.setFieldValue('image', file);
 
-    if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewUrl(reader.result as string);
       };
       reader.readAsDataURL(file);
-    } else {
+
+      return false;
+    },
+    onRemove: () => {
+      formik.setFieldValue('image', null);
       setPreviewUrl(null);
-    }
+    },
   };
 
   return (
@@ -219,14 +142,31 @@ const AddTeacher = () => {
                 ))}
               </div>
               <div className="col-span-full">
-                <FileInput
-                  field="image"
-                  handleFileChange={handleFileChange}
-                  fileType="image/jpeg, image/png, image/avif"
-                  previewUrl={previewUrl}
-                  touched={formik.touched.image || false}
-                  error={formik.errors.image as string}
-                />
+                <Upload.Dragger {...uploadProps}>
+                  <p className="ant-upload-drag-icon">
+                    <InboxOutlined style={{ color: 'gray' }} />
+                  </p>
+                  <p className="ant-upload-text">
+                    Click or drag an image file to this area to upload
+                  </p>
+                  <p className="ant-upload-hint">
+                    Support for a single upload. Only image files (PNG, JPG, AVIF) up to 1MB are allowed.
+                  </p>
+                  {previewUrl && (
+                    <div className="mt-2">
+                      <img
+                        src={previewUrl}
+                        alt="Preview"
+                        className="mx-auto h-48 w-48 object-cover rounded-md shadow-md border-4 border-gray-200"
+                      />
+                    </div>
+                  )}
+                  {formik.touched.image && formik.errors.image && (
+                    <p className="mt-2 text-sm text-red-600">
+                      {formik.errors.image as string}
+                    </p>
+                  )}
+                </Upload.Dragger>
               </div>
               <div>
                 <button

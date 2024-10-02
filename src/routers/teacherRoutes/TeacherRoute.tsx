@@ -6,6 +6,7 @@ import { TeacherForgotPassword } from '../../pages/teacher/TeacherForgotPassword
 import TakeAttendance from '../../pages/teacher/TakeAttendance'
 import TeacherBatchChat from '../../pages/teacher/TeacherBatchChat'
 import StudentsLeaveRequest from '../../pages/teacher/studentsLeaveRequest'
+import NotFound from '../../pages/errorPages/NotFound'
 
 const TeacherRoute = () => {
     return (
@@ -23,6 +24,7 @@ const TeacherRoute = () => {
                 <Route element={<TeacherLayout />}>
                     <Route path='forgotPassword' element={<TeacherForgotPassword />} />
                 </Route>
+                <Route path='*' element={<NotFound />} />
             </Routes>
         </>
     )

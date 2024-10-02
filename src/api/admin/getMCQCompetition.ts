@@ -5,7 +5,6 @@ import * as axios from 'axios';
 export const getMCQCompetition = async () => {
   try {
     const response = await Api.get(adminEndpoint.getMCQCompetition);
-    console.log('getMCQCompetition',response);
     return response.data
     
   } catch (error) {

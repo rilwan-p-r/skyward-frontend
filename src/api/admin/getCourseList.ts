@@ -5,7 +5,6 @@ import * as axios from 'axios';
 export const getCourseList = async () => {
   try {
     const response = await Api.get(adminEndpoint.getCourseList);
-    console.log('CourseList',response);
     return response.data
     
   } catch (error) {

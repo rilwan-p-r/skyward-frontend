@@ -4,7 +4,7 @@ import { StudentTeachersLoginPortal } from '../../pages/StudentTeachersLoginPort
 import { TeacherLogin } from '../../pages/teacher/TeacherLogin';
 import { StudentLogin } from '../../pages/student/StudentLogin';
 import MainLayout from '../../components/main/mainLayout/MainLayout';
-
+import NotFound from '../../pages/errorPages/NotFound';
 
 const HomeRoute = () => {
     return (
@@ -16,6 +16,7 @@ const HomeRoute = () => {
                 <Route path="teacherLogin" element={<TeacherLogin />} />
                 <Route path="StudentLogin" element={<StudentLogin />} />
             </Route>
+            <Route path='*' element={<NotFound />} />
         </Routes>
 
     );

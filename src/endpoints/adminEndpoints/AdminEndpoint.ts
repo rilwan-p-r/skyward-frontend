@@ -19,5 +19,6 @@ const adminEndpoint={
     getMCQCompetition:'admin/getMCQCompetition',
     createAnnouncement:'admin/createAnnouncement',
     getAnnouncements:'admin/getAnnouncements',
+    studentCount:'admin/studentCount',
 }
 export default adminEndpoint

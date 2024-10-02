@@ -5,10 +5,6 @@ import * as axios from 'axios';
 
 export  const editTeacher =  async(teacherId:unknown, formData:FormData): Promise<AxiosResponse<unknown> | undefined> =>{
     try{
-      
-      for (const [key, value] of formData.entries()) {
-        console.log('I am key:', key, 'value:', value);
-      }
      const response = await Api.put(`${adminEndpoint.editTeacher}/${teacherId}`, formData, {
        headers: {
          'Content-Type': 'multipart/form-data'

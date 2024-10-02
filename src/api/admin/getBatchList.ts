@@ -5,7 +5,6 @@ import * as axios from 'axios';
 export const getBatchList = async () => {
   try {
     const response = await Api.get(adminEndpoint.getBatchList);
-    console.log('BatchList',response);
     return response.data
     
   } catch (error) {

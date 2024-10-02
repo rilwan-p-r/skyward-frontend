@@ -4,9 +4,7 @@ import * as axios from 'axios';
 
 export const deleteTeacher = async (teacherId:unknown) => {
   try {
-    const response = await Api.delete(`${adminEndpoint.deleteTeacher}/${teacherId}`);
-    console.log('deletedTeacherrr',response);
-    
+    const response = await Api.delete(`${adminEndpoint.deleteTeacher}/${teacherId}`);  
     return response.data
   } catch (error) {
     if (axios.isAxiosError(error)) {

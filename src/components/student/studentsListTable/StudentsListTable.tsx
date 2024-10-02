@@ -1,34 +1,87 @@
-import React, { useState, MouseEvent, useEffect } from 'react';
+import React, { useState, MouseEvent, useEffect, useCallback } from 'react';
 import { StudentInterface } from '../../../interfaces/studentInterface';
 import AdminSideStudentProfile from '../../admin/adminSideStudentProfile/AdminSideStudentProfile';
-import { CloseOutlined, EditOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import { CloseOutlined, DeleteRowOutlined, EditOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import StudentEditModal from '../../admin/studentEditModal/StudentEditModal';
 import { useWindowSize } from '../../../hooks/useWindowSize';
-import Swal from 'sweetalert2';
 import { deleteStudent } from '../../../api/admin/deleteStudent';
-import { message } from 'antd';
-
+import { Button, Input, message, Pagination, Popconfirm } from 'antd';
 
 interface StudentsListTableProps {
-  students: StudentInterface[];
+  fetchStudents?: (page: number, limit: number, search?: string) => Promise<any>;
+  students?: StudentInterface[];
   actions: boolean;
-  fetchStudents?: () => void;
   viewprofile?: boolean;
+  pagination?: boolean;
+  showSearch?: boolean;
 }
 
-const StudentsListTable: React.FC<StudentsListTableProps> = ({ students, actions, fetchStudents, viewprofile }) => {
+const StudentsListTable: React.FC<StudentsListTableProps> = ({ 
+  fetchStudents, 
+  students: initialStudents, 
+  actions, 
+  viewprofile,
+  pagination = true,
+  showSearch = true
+}) => {
+  const [students, setStudents] = useState<StudentInterface[]>(initialStudents || []);
   const [selectedStudent, setSelectedStudent] = useState<StudentInterface | null>(null);
   const [isEditModalVisible, setIsEditModalVisible] = useState<boolean>(false);
   const [isMobileView, setIsMobileView] = useState<boolean>(false);
   const [showMobileProfile, setShowMobileProfile] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalStudents, setTotalStudents] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const { width } = useWindowSize();
 
   useEffect(() => {
     if (width !== undefined) {
-      setIsMobileView(width < 768); // Assuming 768px as the breakpoint for mobile view
+      setIsMobileView(width < 768);
     }
   }, [width]);
+
+  const loadStudents = useCallback(async () => {
+    if (fetchStudents && pagination) {
+      try {
+        const result = await fetchStudents(currentPage, pageSize, searchTerm);
+        setStudents(result.students);
+        setTotalStudents(result.total);
+        
+        // Select the first student if there are students and none is currently selected
+        if (result.students.length > 0 && !selectedStudent) {
+          setSelectedStudent(result.students[0]);
+        }
+      } catch (error) {
+        message.error('Failed to fetch students');
+      }
+    }
+  }, [fetchStudents, currentPage, pageSize, pagination, searchTerm, selectedStudent]);
+
+  useEffect(() => {
+    if (fetchStudents && pagination) {
+      loadStudents();
+    }
+  }, [loadStudents, fetchStudents, pagination, searchTerm]);
+
+  useEffect(() => {
+    if (initialStudents) {
+      setStudents(initialStudents);
+      setTotalStudents(initialStudents.length);
+      
+      // Select the first student if there are initial students and none is currently selected
+      if (initialStudents.length > 0 && !selectedStudent) {
+        setSelectedStudent(initialStudents[0]);
+      }
+    }
+  }, [initialStudents, selectedStudent]);
+
+
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
 
   const handleRowClick = (student: StudentInterface) => {
     setSelectedStudent(student);
@@ -40,44 +93,46 @@ const StudentsListTable: React.FC<StudentsListTableProps> = ({ students, actions
   const handleEditModalClick = (e: MouseEvent, student: StudentInterface) => {
     e.stopPropagation();
     setSelectedStudent(student);
-    setIsEditModalVisible(true)
-  }
-  const handleDeleteModalClick = async (e: MouseEvent, student: StudentInterface) => {
-    e.stopPropagation();
-    setSelectedStudent(student);
+    setIsEditModalVisible(true);
+  };
 
-    const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: `Do you want to delete ${student.firstName} ${student.lastName}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    });
-
-    if (result.isConfirmed) {
-      await deleteStudent(student._id)
-      if(fetchStudents){
-        fetchStudents();
-      }
-      message.success('Student deleted successfully')
+  const handleDeleteStudent = async (student: StudentInterface) => {
+    try {
+      await deleteStudent(student._id);
+      loadStudents();
+      message.success('Student deleted successfully');
+    } catch (error) {
+      message.error('Failed to delete student');
     }
   };
 
   const handleEditModalClose = () => {
-    setIsEditModalVisible(false)
-  }
+    setIsEditModalVisible(false);
+    loadStudents();
+  };
 
   const handleCloseMobileProfile = () => {
     setShowMobileProfile(false);
     setSelectedStudent(null);
   };
 
+  const handlePageChange = (page: number, pageSize?: number) => {
+    setCurrentPage(page);
+    if (pageSize) setPageSize(pageSize);
+  };
 
   return (
     <div className="overflow-x-auto">
-      <h2 className="text-3xl font-bold mb-8 text-gray-800">Students</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-3xl font-bold text-gray-800">Students</h2>
+        {showSearch && (
+          <Input.Search
+            placeholder="Search students"
+            onSearch={handleSearch}
+            style={{ width: 300 }}
+          />
+        )}
+      </div>
       {students.length === 0 ? (
         <div className="text-center text-gray-500">
           <p>No students have been added to this course yet.</p>
@@ -126,7 +181,16 @@ const StudentsListTable: React.FC<StudentsListTableProps> = ({ students, actions
                       {actions && (
                         <td className="px-4 py-4 whitespace-nowrap">
                           <EditOutlined className="text-blue-500 hover:text-blue-700 cursor-pointer pr-4" onClick={(e) => handleEditModalClick(e, student)} />
-                          <UserDeleteOutlined className="text-red-500 hover:text-red-600 cursor-pointer" onClick={(e) => handleDeleteModalClick(e, student)} />
+                          <Popconfirm
+                            title="Delete the student"
+                            description={`Are you sure to delete ${student.firstName} ${student.lastName}?`}
+                            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                            onConfirm={() => handleDeleteStudent(student)}
+                            okText="Yes"
+                            cancelText="No"
+                          >
+                            <Button className='border-0' danger><DeleteRowOutlined /></Button>
+                          </Popconfirm>
                         </td>
                       )}
                     </tr>
@@ -134,6 +198,18 @@ const StudentsListTable: React.FC<StudentsListTableProps> = ({ students, actions
                 </tbody>
               </table>
             </div>
+            {pagination && (
+              <div className="mt-4 flex justify-center">
+                <Pagination
+                  current={currentPage}
+                  total={totalStudents}
+                  pageSize={pageSize}
+                  onChange={handlePageChange}
+                  showSizeChanger
+                  showQuickJumper
+                />
+              </div>
+            )}
           </div>
           {viewprofile && !isMobileView && (
             <div className="w-1/3 md:pl-6">
@@ -142,16 +218,13 @@ const StudentsListTable: React.FC<StudentsListTableProps> = ({ students, actions
           )}
         </div>
       )}
-      {/* --------------------------isEditModalVisible--------------------------------- */}
-      {isEditModalVisible &&
+      {isEditModalVisible && selectedStudent && (
         <StudentEditModal
           handleClose={handleEditModalClose}
           student={selectedStudent}
-          fetchStudents={fetchStudents || (() => {})}
+          fetchStudents={() => loadStudents()}
         />
-      }
-      
-
+      )}
 
       {viewprofile && isMobileView && showMobileProfile && selectedStudent && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onClick={handleCloseMobileProfile}>
@@ -169,7 +242,3 @@ const StudentsListTable: React.FC<StudentsListTableProps> = ({ students, actions
 };
 
 export default StudentsListTable;
-
-
-
-

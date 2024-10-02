@@ -5,7 +5,6 @@ import * as axios from 'axios';
 export const getAnnouncements = async () => {
   try {
     const response = await Api.get(adminEndpoint.getAnnouncements);
-    console.log('AnnouncementsList',response);
     return response.data
     
   } catch (error) {

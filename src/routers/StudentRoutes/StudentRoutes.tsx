@@ -8,6 +8,7 @@ import StudentBatchChat from '../../pages/student/studentBatchChat'
 import StudentLeaveApply from '../../pages/student/leaveApplyStudent'
 import MCQCompetitionListStudent from '../../pages/student/mcqCompetitionListStudent'
 import StudentReview from '../../pages/student/StudentReview'
+import NotFound from '../../pages/errorPages/NotFound'
 
 
 const StudentRoutes = () => {
@@ -29,6 +30,7 @@ const StudentRoutes = () => {
                 <Route element={<StudentLayout />}>
                     <Route path='forgotPassword' element={<StudentForgotPassword />} />
                 </Route>
+                <Route path='*' element={<NotFound />} />
             </Routes>
         </>
     )

@@ -11,6 +11,7 @@ import CourseList from '../../pages/admin/courseList'
 import AdminMCQCompetitionList from '../../pages/admin/AdminMCQCompetitions'
 import AddMCQCompetition from '../../pages/admin/AddMCQCompetition'
 import AdminAnnouncement from '../../pages/admin/AdminAnnouncement'
+import NotFound from '../../pages/errorPages/NotFound'
 
 
 
@@ -29,13 +30,13 @@ const AdminRoutes = () => {
           <Route path="AdminMCQCompetitionList" element={<AdminMCQCompetitionList />} />
           <Route path="AddMCQCompetition" element={<AddMCQCompetition />} />
           <Route path="AdminAnnouncement" element={<AdminAnnouncement />} />
-        </Route>
           <Route path="Courses" element={<CourseList />} />
+        </Route>
 
 
         {/* Admin login route does not need protection */}
           <Route path='/' element={<AdminLogin />} />
-
+          <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   )

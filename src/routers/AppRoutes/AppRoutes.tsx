@@ -5,7 +5,6 @@ import AdminRoutes from '../AdminRoutes/AdminRoutes'
 import StudentRoutes from '../StudentRoutes/StudentRoutes'
 import TeacherRoute from '../teacherRoutes/TeacherRoute'
 
-
 const AppRoutes = () => {
     return (
         <>
@@ -14,6 +13,8 @@ const AppRoutes = () => {
                 <Route path='/admin/*' element={<AdminRoutes />} />
                 <Route path='/student/*' element={<StudentRoutes />} />
                 <Route path='/teacher/*' element={<TeacherRoute />} />
+
+
             </Routes>
         </>
     )

@@ -62,8 +62,8 @@ function Card({ item }:{item:CollegeContentItem}) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="text relative z-50">
-        <h1 className="font-bold text-xl md:text-3xl text-gray-50 relative">
+      <div className="text relative z-30">
+        <h1 className="font-bold text-xl md:text-3xl text-white relative">
           {item.title}
         </h1>
         <p className="font-normal text-base text-gray-50 relative my-4">

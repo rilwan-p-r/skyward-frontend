@@ -6,7 +6,6 @@ import * as axios from 'axios';
 export const deleteStudent = async (studentId: unknown): Promise<AxiosResponse<unknown> | undefined> => {
     try {
         const response = await Api.delete(`${adminEndpoint.deleteStudent}/${studentId}`);
-        console.log('deleteStudentResponse', response);
         return response
     } catch (error) {
         if (axios.isAxiosError(error)) {

@@ -54,6 +54,7 @@ const BatchList: React.FC = () => {
     }
   }, []);
 
+  
   const fetchStudents = async (batchId: string) => {
     try {
       const response = await getStudentsByBatchId(batchId);
@@ -96,6 +97,7 @@ const BatchList: React.FC = () => {
   return (
     <div className='flex h-screen bg-gray-100'>
       <AdminSidebar />
+      <div className="flex-1 overflow-auto">
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800">Batches</h1>
@@ -147,6 +149,9 @@ const BatchList: React.FC = () => {
             <StudentsListTable
               students={students}
               actions={false}
+              viewprofile={true}
+              pagination={false}
+              showSearch={false}
             />
           </div>
         )}
@@ -167,6 +172,7 @@ const BatchList: React.FC = () => {
           fetchBatchList={fetchBatchList}
            />
         }
+        </div>
       </div>
     </div>
   );

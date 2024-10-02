@@ -51,6 +51,8 @@ export const ScrollingReviews = () => {
     const fetchReviews = async () => {
       try {
         const response = await getReviews();
+        console.log(response);
+        
         if (response && Array.isArray(response)) {
           setReviews(response);
         }

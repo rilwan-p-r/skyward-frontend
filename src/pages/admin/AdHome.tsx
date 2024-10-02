@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { getTeachers } from '../../api/admin/getTeachers';
 import { TeacherInterface } from '../../interfaces/teacherInterface';
 import { StudentInterface } from '../../interfaces/studentInterface';
-import { getStudents } from '../../api/admin/getStudents';
+import { studentCount } from '../../api/admin/getStudents';
 
 const AdminHome = () => {
   const [batches,setBatches]=useState<BatchInterface[]>([])
@@ -45,8 +45,8 @@ const AdminHome = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const resStudents = await getStudents(); 
-        setStudents(resStudents); 
+        const resStudents = await studentCount(); 
+        setStudents(resStudents?.data); 
       } catch (error) {
         toast.error('Failed to fetch students list')
         console.error('Failed to fetch students list', error);
