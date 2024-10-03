@@ -3,7 +3,7 @@ import io, { Socket } from 'socket.io-client';
 import { MessageInterface } from '../interfaces/messageInterface';
 import { BatchInterface } from '../interfaces/BatchInterface';
 
-const SOCKET_SERVER_URL = import.meta.env.BACKEND_PORT;
+const SOCKET_SERVER_URL = import.meta.env.VITE_SOCKET_SERVER_URL;
 
 export const useSocketIO = (batchId: string, role: 'student' | 'teacher', userId: string, userName: string) => {
   const [socket, setSocket] = useState<Socket | null>(null);
