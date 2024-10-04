@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { motion, } from 'framer-motion';
 import {FaTimesCircle, FaVideo } from 'react-icons/fa';
 import StudentSidebar from '../../components/student/studentSidebar/StudentSidebar';
-import { useSocketIO } from '../../hooks/useSocketIO';
 import { StudentInterface } from '../../interfaces/studentInterface';
 import { MessageInterface } from '../../interfaces/messageInterface';
 import { RootState } from '../../redux/store/store';
@@ -18,6 +17,7 @@ import { RightSidebar } from '../../components/studentChat/RightSidebar';
 import ChatHeader from '../../components/studentChat/ChatHeader';
 import SendMessageForm from '../../components/studentChat/SendMessageForm';
 import MessageItem from '../../components/studentChat/MessageItem';
+import { useSocket } from '../../context/useSocket';
 declare global {
   interface Window {
     JitsiMeetExternalAPI: any;
@@ -40,7 +40,7 @@ const StudentBatchChat: React.FC = () => {
     isVideoCallActive,
     videoCallInitiator,
     jitsiLink
-  } = useSocketIO(batchId, 'student', studentId, studentName);
+  } = useSocket();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
